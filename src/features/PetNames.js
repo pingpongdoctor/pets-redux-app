@@ -4,7 +4,7 @@ import { petData } from "../data/petData";
 //GET PET ARRAY FROM THE LOCAL STORAGE
 const petDataLocal = JSON.parse(localStorage.getItem("petArrLocal"));
 //DEFINE THE SLICE
-export const petSlice = createSlice({
+const petSlice = createSlice({
   //NAME OF THE CHAIN ACTIONS
   name: "pets",
   //THE VALUE OF THE STATE

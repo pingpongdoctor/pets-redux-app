@@ -2,17 +2,22 @@ import "./App.scss";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { addPet, deletePet, updateOwner } from "./features/PetNames";
+import { changeTheme } from "./features/ThemeColor";
 
 function App() {
   //USE DISPATCH METHOD TO RUN THE REDUCER FUNCTIONS
   const dispatch = useDispatch();
   //ACCESS THE STATE IN THE SLICE THROUGH USESELECTOR
   const petArr = useSelector((state) => state.pets.value);
+  //ACCESS THE THEME REDUCER
+  const currentTheme = useSelector((state) => state.theme.value);
   //STATE FOR THE PET AND OWNER INPUTS
   const [petName, setPetName] = useState("");
   const [ownerName, setOwnerName] = useState("");
   //STATE OF NEW OWNER
   const [newOwner, setNewOwner] = useState("");
+  //STATE FOR THE COLOR
+  const [color, setColor] = useState("");
   //FUNCTIONS TO UPDATE PET AND OWNER NAMES
   const handleUpdatPetName = function (event) {
     setPetName(event.target.value);
@@ -55,9 +60,30 @@ function App() {
   useEffect(() => {
     localStorage.setItem("petArrLocal", JSON.stringify(petArr));
   }, [petArr]);
+  //USEEFFECT TO SET THE UPDATED THEME TO THE LOCAL STORAGE
+  useEffect(() => {
+    localStorage.setItem("themeLocal", color);
+  }, [color]);
 
   return (
-    <div className="App">
+    <div style={{ color: currentTheme }} className="App">
+      <div>
+        <input
+          value={color}
+          onChange={(event) => {
+            setColor(event.target.value);
+          }}
+          type="text"
+          placeholder="The color you wanna change to..."
+        />
+        <button
+          onClick={() => {
+            dispatch(changeTheme(color));
+          }}
+        >
+          Change Color
+        </button>
+      </div>
       <h1>List of pets</h1>
       {/* ADD PET */}
       <div className="add-pet">
