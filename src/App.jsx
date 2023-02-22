@@ -29,15 +29,35 @@ function App() {
   const handleUpdateNewOwner = function (event) {
     setNewOwner(event.target.value);
   };
+  //FUNCTION TO VALIDATE PETNAME AND OWNER NAME
+  const isPetAndOwnerValid = function () {
+    if (petName && ownerName) {
+      return true;
+    }
+    return false;
+  };
+  //FUNCTION TO VALIDATE COLOR
+  const isColorValid = function () {
+    if (color) {
+      return true;
+    }
+    return false;
+  };
   //FUNCTION TO ADD PET
   const handleAddPet = function () {
-    dispatch(
-      addPet({
-        id: petArr[petArr.length - 1].id + 1,
-        name: petName,
-        owner: ownerName,
-      })
-    );
+    if (isPetAndOwnerValid()) {
+      const id = petArr[petArr.length - 1].id + 1;
+      dispatch(
+        addPet({
+          id: id,
+          name: petName,
+          owner: ownerName,
+        })
+      );
+      alert(`The new pet and owner with id ${id} have been added`);
+    } else {
+      alert("Please input both pet name and owner name!");
+    }
     setPetName("");
     setOwnerName("");
   };
@@ -48,6 +68,7 @@ function App() {
         id: id,
       })
     );
+    alert(`The pet and owner with the id ${id} have been deleted`);
   };
   //FUNCTION TO UPDATE OWNER
   const handleSetNewOwner = function (id) {
@@ -60,11 +81,15 @@ function App() {
   };
   //USEEFFECT TO SET THE UPDATED PETARR TO THE LOCAL STORAGE
   useEffect(() => {
-    localStorage.setItem("petArrLocalStorage", JSON.stringify(petArr));
+    if (isPetAndOwnerValid()) {
+      localStorage.setItem("petArrLocalStorage", JSON.stringify(petArr));
+    }
   }, [petArr]);
   //USEEFFECT TO SET THE UPDATED THEME TO THE LOCAL STORAGE
   useEffect(() => {
-    localStorage.setItem("themeLocalStorage", currentTheme);
+    if (isColorValid()) {
+      localStorage.setItem("themeLocalStorage", currentTheme);
+    }
     setColor("");
   }, [currentTheme]);
 
@@ -77,11 +102,16 @@ function App() {
             setColor(event.target.value);
           }}
           type="text"
-          placeholder="The color you wanna change to..."
+          placeholder="Input color here..."
         />
         <button
           onClick={() => {
-            dispatch(changeTheme(color));
+            if (isColorValid()) {
+              dispatch(changeTheme(color));
+              alert(`Color theme has been changed to ${color}`);
+            } else {
+              alert("Please input color!");
+            }
           }}
         >
           Change Color
