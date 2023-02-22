@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const themeLocal = localStorage.getItem("themeLocal");
-
+//GET THE COLOR THEME FROM LOCAL STORAGE
+const themeLocalStorage = localStorage.getItem("themeLocalStorage");
+console.log(themeLocalStorage);
 const themeSlice = createSlice({
   name: "theme",
-  initialState: themeLocal ? { value: themeLocal } : { value: "blue" },
+  initialState: { value: themeLocalStorage ? themeLocalStorage : "blue" },
   reducers: {
+    //REDUCER TO IMPLEMENT THE CHANGE COLOR THEME ACTION
     changeTheme: (state, action) => {
       state.value = action.payload;
     },

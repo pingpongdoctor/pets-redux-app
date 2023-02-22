@@ -1,7 +1,7 @@
 import "./App.scss";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
-import { addPet, deletePet, updateOwner } from "./features/PetNames";
+import { addPet, deletePet, updateOwner } from "./features/Pets";
 import { changeTheme } from "./features/ThemeColor";
 
 function App() {
@@ -38,6 +38,8 @@ function App() {
         owner: ownerName,
       })
     );
+    setPetName("");
+    setOwnerName("");
   };
   //FUNCTION TO DELETE PET
   const handleDeletePet = function (id) {
@@ -58,12 +60,13 @@ function App() {
   };
   //USEEFFECT TO SET THE UPDATED PETARR TO THE LOCAL STORAGE
   useEffect(() => {
-    localStorage.setItem("petArrLocal", JSON.stringify(petArr));
+    localStorage.setItem("petArrLocalStorage", JSON.stringify(petArr));
   }, [petArr]);
   //USEEFFECT TO SET THE UPDATED THEME TO THE LOCAL STORAGE
   useEffect(() => {
-    localStorage.setItem("themeLocal", color);
-  }, [color]);
+    localStorage.setItem("themeLocalStorage", currentTheme);
+    setColor("");
+  }, [currentTheme]);
 
   return (
     <div style={{ color: currentTheme }} className="App">
@@ -113,10 +116,12 @@ function App() {
                 onChange={handleUpdateNewOwner}
                 type="text"
                 placeholder="New owner..."
+                id="new-owner-input"
               />
               <button
                 onClick={() => {
                   handleSetNewOwner(pet.id);
+                  document.getElementById("new-owner-input").value = "";
                 }}
               >
                 Add new owner
