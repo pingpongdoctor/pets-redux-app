@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { addPet, deletePet, updateOwner } from "./features/Pets";
 import { changeTheme } from "./features/ThemeColor";
+import axios from "axios";
 
 function App() {
   //USE DISPATCH METHOD TO RUN THE REDUCER FUNCTIONS
@@ -18,6 +19,24 @@ function App() {
   const [newOwner, setNewOwner] = useState("");
   //STATE FOR THE COLOR
   const [color, setColor] = useState("");
+  //STATE FOT THE ARRAY OF CAT IMAGE LINKS
+  const [imgLinkArr, setImgLinkArr] = useState([]);
+  //USE EFFECT TO GET CAT PICTURES
+  useEffect(() => {
+    const getImgData = async function () {
+      //GET THE NUMBER OF IMAGES THAT EQUALS TO THE LENGTH OF THE PET ARRAY
+      const arrLength = petArr.length;
+      const newArr = [];
+      for (let i = 1; i <= arrLength; i++) {
+        //GET DATA FROM CAT REST API
+        const response = await axios.get("https://cataas.com/cat?json=true");
+        newArr.push(response.data.url);
+      }
+      setImgLinkArr(newArr);
+    };
+    getImgData();
+  }, [petArr]);
+
   //FUNCTIONS TO UPDATE PET AND OWNER NAMES
   const handleUpdatPetName = function (event) {
     setPetName(event.target.value);
@@ -133,8 +152,13 @@ function App() {
       {/* RENDER PETS */}
       <div className="App__flex-container">
         {petArr.length > 0 &&
-          petArr.map((pet) => (
+          petArr.map((pet, index) => (
             <div className="App__flex-item" key={pet.id}>
+              <img
+                className="App__img"
+                src={`https://cataas.com${imgLinkArr[index]}`}
+                alt="cat-img"
+              />
               <p>
                 {" "}
                 <strong>Id:</strong> {pet.id}
@@ -177,7 +201,7 @@ function App() {
           window.location.reload(); //USE THIS TO RELOAD THE CURRENT PAGE
         }}
       >
-        Reset the page
+        Reset the browser's local storage
       </button>
     </div>
   );
