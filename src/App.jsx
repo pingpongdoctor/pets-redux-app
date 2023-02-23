@@ -101,7 +101,6 @@ function App() {
           placeholder="Input color here..."
         />
         <button
-          className="App__color-theme-button"
           onClick={() => {
             if (isColorValid()) {
               dispatch(changeTheme(color));
@@ -116,7 +115,7 @@ function App() {
       </div>
       <h1>List of pets and owners</h1>
       {/* ADD PET */}
-      <div className="add-pet">
+      <div className="App__add-pet-wrapper">
         <input
           value={petName}
           onChange={handleUpdatPetName}
@@ -132,20 +131,20 @@ function App() {
         <button onClick={handleAddPet}>Add pet</button>
       </div>
       {/* RENDER PETS */}
-      <div className="flex-container">
+      <div className="App__flex-container">
         {petArr.length > 0 &&
           petArr.map((pet) => (
-            <div className="flex-item" key={pet.id}>
-              <p className="text">
+            <div className="App__flex-item" key={pet.id}>
+              <p>
                 {" "}
-                <strong>id:</strong> {pet.id}
+                <strong>Id:</strong> {pet.id}
               </p>
-              <p className="text">
-                <strong>pet name:</strong> {pet.name}
+              <p>
+                <strong>Pet name:</strong> {pet.name}
               </p>
-              <p className="text">
+              <p>
                 {" "}
-                <strong>owner name:</strong> {pet.owner}
+                <strong>Owner name:</strong> {pet.owner}
               </p>
               <input
                 onChange={handleUpdateNewOwner}
@@ -172,7 +171,7 @@ function App() {
           ))}
       </div>
       <button
-        className="reset-button"
+        className="App__reset-button"
         onClick={() => {
           localStorage.clear();
           window.location.reload(); //USE THIS TO RELOAD THE CURRENT PAGE
