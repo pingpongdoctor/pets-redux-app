@@ -81,21 +81,17 @@ function App() {
   };
   //USEEFFECT TO SET THE UPDATED PETARR TO THE LOCAL STORAGE
   useEffect(() => {
-    if (isPetAndOwnerValid()) {
-      localStorage.setItem("petArrLocalStorage", JSON.stringify(petArr));
-    }
+    localStorage.setItem("petArrLocalStorage", JSON.stringify(petArr));
   }, [petArr]);
   //USEEFFECT TO SET THE UPDATED THEME TO THE LOCAL STORAGE
   useEffect(() => {
-    if (isColorValid()) {
-      localStorage.setItem("themeLocalStorage", currentTheme);
-    }
+    localStorage.setItem("themeLocalStorage", currentTheme);
     setColor("");
   }, [currentTheme]);
 
   return (
     <div style={{ color: currentTheme }} className="App">
-      <div>
+      <div className="App__color-theme-wrapper">
         <input
           value={color}
           onChange={(event) => {
@@ -105,19 +101,20 @@ function App() {
           placeholder="Input color here..."
         />
         <button
+          className="App__color-theme-button"
           onClick={() => {
             if (isColorValid()) {
               dispatch(changeTheme(color));
               alert(`Color theme has been changed to ${color}`);
             } else {
-              alert("Please input color!");
+              alert("Please input the color!");
             }
           }}
         >
-          Change Color
+          Change Color Theme
         </button>
       </div>
-      <h1>List of pets</h1>
+      <h1>List of pets and owners</h1>
       {/* ADD PET */}
       <div className="add-pet">
         <input
@@ -139,9 +136,17 @@ function App() {
         {petArr.length > 0 &&
           petArr.map((pet) => (
             <div className="flex-item" key={pet.id}>
-              <p className="text">id:{pet.id}</p>
-              <p className="text">pet name:{pet.name}</p>
-              <p className="text">owner name:{pet.owner}</p>
+              <p className="text">
+                {" "}
+                <strong>id:</strong> {pet.id}
+              </p>
+              <p className="text">
+                <strong>pet name:</strong> {pet.name}
+              </p>
+              <p className="text">
+                {" "}
+                <strong>owner name:</strong> {pet.owner}
+              </p>
               <input
                 onChange={handleUpdateNewOwner}
                 type="text"
