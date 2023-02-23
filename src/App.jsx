@@ -1,18 +1,23 @@
 import "./App.scss";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
-import { addPet, deletePet, updateOwner } from "./features/PetNames";
+import { addPet, deletePet, updateOwner } from "./features/Pets";
+import { changeTheme } from "./features/ThemeColor";
 
 function App() {
   //USE DISPATCH METHOD TO RUN THE REDUCER FUNCTIONS
   const dispatch = useDispatch();
   //ACCESS THE STATE IN THE SLICE THROUGH USESELECTOR
   const petArr = useSelector((state) => state.pets.value);
+  //ACCESS THE THEME REDUCER
+  const currentTheme = useSelector((state) => state.theme.value);
   //STATE FOR THE PET AND OWNER INPUTS
   const [petName, setPetName] = useState("");
   const [ownerName, setOwnerName] = useState("");
   //STATE OF NEW OWNER
   const [newOwner, setNewOwner] = useState("");
+  //STATE FOR THE COLOR
+  const [color, setColor] = useState("");
   //FUNCTIONS TO UPDATE PET AND OWNER NAMES
   const handleUpdatPetName = function (event) {
     setPetName(event.target.value);
@@ -24,15 +29,37 @@ function App() {
   const handleUpdateNewOwner = function (event) {
     setNewOwner(event.target.value);
   };
+  //FUNCTION TO VALIDATE PETNAME AND OWNER NAME
+  const isPetAndOwnerValid = function () {
+    if (petName && ownerName) {
+      return true;
+    }
+    return false;
+  };
+  //FUNCTION TO VALIDATE COLOR
+  const isColorValid = function () {
+    if (color) {
+      return true;
+    }
+    return false;
+  };
   //FUNCTION TO ADD PET
   const handleAddPet = function () {
-    dispatch(
-      addPet({
-        id: petArr[petArr.length - 1].id + 1,
-        name: petName,
-        owner: ownerName,
-      })
-    );
+    if (isPetAndOwnerValid()) {
+      const id = petArr[petArr.length - 1].id + 1;
+      dispatch(
+        addPet({
+          id: id,
+          name: petName,
+          owner: ownerName,
+        })
+      );
+      alert(`The new pet and owner with id ${id} have been added`);
+    } else {
+      alert("Please input both pet name and owner name!");
+    }
+    setPetName("");
+    setOwnerName("");
   };
   //FUNCTION TO DELETE PET
   const handleDeletePet = function (id) {
@@ -41,6 +68,7 @@ function App() {
         id: id,
       })
     );
+    alert(`The pet and owner with the id ${id} have been deleted`);
   };
   //FUNCTION TO UPDATE OWNER
   const handleSetNewOwner = function (id) {
@@ -53,12 +81,40 @@ function App() {
   };
   //USEEFFECT TO SET THE UPDATED PETARR TO THE LOCAL STORAGE
   useEffect(() => {
-    localStorage.setItem("petArrLocal", JSON.stringify(petArr));
+    localStorage.setItem("petArrLocalStorage", JSON.stringify(petArr));
   }, [petArr]);
+  //USEEFFECT TO SET THE UPDATED THEME TO THE LOCAL STORAGE
+  useEffect(() => {
+    localStorage.setItem("themeLocalStorage", currentTheme);
+    setColor("");
+  }, [currentTheme]);
 
   return (
-    <div className="App">
-      <h1>List of pets</h1>
+    <div style={{ color: currentTheme }} className="App">
+      <div className="App__color-theme-wrapper">
+        <input
+          value={color}
+          onChange={(event) => {
+            setColor(event.target.value);
+          }}
+          type="text"
+          placeholder="Input color here..."
+        />
+        <button
+          className="App__color-theme-button"
+          onClick={() => {
+            if (isColorValid()) {
+              dispatch(changeTheme(color));
+              alert(`Color theme has been changed to ${color}`);
+            } else {
+              alert("Please input the color!");
+            }
+          }}
+        >
+          Change Color Theme
+        </button>
+      </div>
+      <h1>List of pets and owners</h1>
       {/* ADD PET */}
       <div className="add-pet">
         <input
@@ -80,17 +136,27 @@ function App() {
         {petArr.length > 0 &&
           petArr.map((pet) => (
             <div className="flex-item" key={pet.id}>
-              <p className="text">id:{pet.id}</p>
-              <p className="text">pet name:{pet.name}</p>
-              <p className="text">owner name:{pet.owner}</p>
+              <p className="text">
+                {" "}
+                <strong>id:</strong> {pet.id}
+              </p>
+              <p className="text">
+                <strong>pet name:</strong> {pet.name}
+              </p>
+              <p className="text">
+                {" "}
+                <strong>owner name:</strong> {pet.owner}
+              </p>
               <input
                 onChange={handleUpdateNewOwner}
                 type="text"
                 placeholder="New owner..."
+                id="new-owner-input"
               />
               <button
                 onClick={() => {
                   handleSetNewOwner(pet.id);
+                  document.getElementById("new-owner-input").value = "";
                 }}
               >
                 Add new owner

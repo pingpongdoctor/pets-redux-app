@@ -2,16 +2,18 @@ import { createSlice } from "@reduxjs/toolkit";
 import { petData } from "../data/petData";
 
 //GET PET ARRAY FROM THE LOCAL STORAGE
-const petDataLocal = JSON.parse(localStorage.getItem("petArrLocal"));
+const petDataLocalStorage = JSON.parse(
+  localStorage.getItem("petArrLocalStorage")
+);
 //DEFINE THE SLICE
-export const petSlice = createSlice({
+const petSlice = createSlice({
   //NAME OF THE CHAIN ACTIONS
   name: "pets",
   //THE VALUE OF THE STATE
   initialState: {
     //IF THE PETDATA IS NOT SAVED IN THE LOCAL STORAGE, GET THE PETDATA
     //IF IT IS SAVED, GET THE LOCAL DATA
-    value: petDataLocal ? petDataLocal : petData,
+    value: petDataLocalStorage ? petDataLocalStorage : petData,
   },
   //THE REDUCER TO IMPLEMENT THE ACTIONS
   reducers: {

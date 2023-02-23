@@ -4,12 +4,14 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import petReducer from "./features/PetNames";
+import petReducer from "./features/Pets";
+import themeReducer from "./features/ThemeColor";
 //DEFINE THE STORE
 const store = configureStore({
   //PUT THE REDUCERS HERE
   reducer: {
     pets: petReducer,
+    theme: themeReducer,
   },
 });
 
