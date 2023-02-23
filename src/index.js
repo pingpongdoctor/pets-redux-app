@@ -17,12 +17,12 @@ const store = configureStore({
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
+  <div>
     {/* PASS DOWN THE STORE TO THE APP ELEMENT */}
     <Provider store={store}>
       <App />
     </Provider>
-  </React.StrictMode>
+  </div>
 );
 
 reportWebVitals();
