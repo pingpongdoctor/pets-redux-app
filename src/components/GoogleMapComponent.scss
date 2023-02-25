@@ -1,0 +1,24 @@
+.map {
+  margin-top: 2rem;
+}
+
+.map__container {
+  width: 100%;
+  height: 100vh;
+}
+
+.map__search-box {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  background-color: ivory;
+  width: fit-content;
+  padding: 0.5rem;
+  border-radius: 10px;
+}
