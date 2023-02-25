@@ -7,9 +7,9 @@
 body {
   margin: 0;
   text-align: center;
-  background-image: url("../src/assets/pictures/cat.jpg");
-  background-position: center;
-  background-size: cover;
+  // background-image: url("../src/assets/pictures/cat.jpg");
+  // background-position: center;
+  // background-size: cover;
   margin: 1rem;
 }
 
@@ -22,7 +22,7 @@ p {
   margin: 0;
 }
 
-button {
+.App__btn {
   padding: 1rem;
   border: none;
   border-radius: 5px;
