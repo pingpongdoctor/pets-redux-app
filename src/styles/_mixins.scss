@@ -3,3 +3,21 @@
     @content;
   }
 }
+
+@mixin small-mobile {
+  @media (max-width: 500px) {
+    @content;
+  }
+}
+
+@mixin tablet-desktop {
+  @media (min-width: 833px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: 1280px) {
+    @content;
+  }
+}

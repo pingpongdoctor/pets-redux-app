@@ -7,10 +7,7 @@
 body {
   margin: 0;
   text-align: center;
-  // background-image: url("../src/assets/pictures/cat.jpg");
-  // background-position: center;
-  // background-size: cover;
-  margin: 1rem;
+  background-color: rgba(0, 0, 0, 0.438);
 }
 
 h1 {
@@ -20,24 +17,6 @@ h1 {
 p {
   font-size: 2rem;
   margin: 0;
-}
-
-.App__btn {
-  padding: 1rem;
-  border: none;
-  border-radius: 5px;
-  background-color: blue;
-  color: white;
-  transition: transform 0.5s;
-  width: 160px;
-  min-width: 80px;
-  &:hover {
-    transform: scale(1.03);
-  }
-  &:active {
-    box-shadow: 0px 1px 16px -6px rgba(0, 0, 0, 0.6);
-    transform: scale(0.95);
-  }
 }
 
 input {
@@ -50,15 +29,45 @@ input {
 }
 
 .App {
+  @include mobile {
+    margin: 1rem;
+  }
+  @include tablet-desktop {
+    margin: 1rem 2rem;
+  }
+
+  &__container {
+    @include desktop {
+      margin: 0 auto;
+      max-width: 1216px;
+    }
+  }
   &__flex-container {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    padding: 0 1rem;
     justify-content: space-between;
     align-items: stretch;
     @include mobile {
       justify-content: center;
+    }
+  }
+
+  &__btn {
+    padding: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: blue;
+    color: white;
+    transition: transform 0.5s;
+    width: 160px;
+    min-width: 80px;
+    &:hover {
+      transform: scale(1.03);
+    }
+    &:active {
+      box-shadow: 0px 1px 16px -6px rgba(0, 0, 0, 0.181);
+      transform: scale(0.95);
     }
   }
 
@@ -73,7 +82,7 @@ input {
     justify-content: center;
     align-items: center;
     gap: 1rem;
-    background-color: rgba(255, 255, 240, 0.493);
+    background-color: rgba(255, 255, 240, 0.778);
     @include mobile {
       width: 70%;
     }
