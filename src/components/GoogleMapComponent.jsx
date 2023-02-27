@@ -9,8 +9,11 @@ import {
   Autocomplete,
 } from "@react-google-maps/api";
 import { useEffect, useState } from "react";
+import { useWindowSize } from "../utils/utils";
 
 export default function GoogleMapComponent() {
+  //GET CURRENT WINDOW SIZE
+  const currentWindowSize = useWindowSize().width;
   //STATE FOR ZOOM
   const [zoom, setZoom] = useState(2);
   //STATE FOR THE FOUND PLACES
@@ -137,6 +140,7 @@ export default function GoogleMapComponent() {
         <div className="map__search-box">
           <Autocomplete>
             <input
+              className="map__input"
               onChange={(event) => {
                 setInputAddress(event.target.value);
               }}
@@ -147,9 +151,9 @@ export default function GoogleMapComponent() {
             onClick={() => {
               handleUpdateCurrentLocationBasedInput();
             }}
-            className="App__btn"
+            className="App__btn map__btn"
           >
-            Submit Your Location
+            {currentWindowSize < 500 ? "Submit" : " Submit Your Location"}
           </button>
           {/* BUTTON TO RELLOCATE THE CURRENT LOCATION */}
           {currentLocation && (
