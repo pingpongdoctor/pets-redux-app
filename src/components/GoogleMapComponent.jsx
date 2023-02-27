@@ -36,8 +36,6 @@ export default function GoogleMapComponent() {
     //CREATE A NEW GEOCODER
     const geocoder = new window.google.maps.Geocoder();
     //USE GEOCODER TO CONVERT ADDRESS TO COORDINATE
-    // console.log(address);
-    // console.log(inputAddress);
     geocoder.geocode({ address }, (results, status) => {
       if (status === "OK") {
         const location = results[0].geometry.location;
@@ -48,9 +46,9 @@ export default function GoogleMapComponent() {
   };
   //FUNCTION TO SEARCH NEARBY LOCATION BASED ON A PROVIDED LOCATION
   const handleSearchNearbyLocation = function (location) {
-    //DEFINE SERVICE BY USING PLACESERVICE METHOD
+    //DEFINE SERVICE BY USING PLACESERVICE PROP
     const service = new window.google.maps.places.PlacesService(map);
-    //USE NEARBYSEARCH METHOD TO SEARCH NEARBY VETERINARY_CARE
+    //USE NEARBYSEARCH PROP TO SEARCH NEARBY VETERINARY_CARE
     service.nearbySearch(
       //PROVIDE THE NEEDED INPUT DATA TO SEARCH LOCATIONS
       {
@@ -108,6 +106,12 @@ export default function GoogleMapComponent() {
   const onMapLoad = (map) => {
     //SET THE MAP STATE WHICH IS USED TO RECENTER THE MAP
     setMap(map);
+    //SCROLL TO THE TOP OF THE PAGE WHEN THE MAP IS FULLY LOADED (TITLESLOADED)
+    //IMPLEMENT ONLY IN THE FIRST TIME THE MAP IS RENDERRED ( USE ADDLISTENERONE AND IMPLEMENT IN ONLOAD PROP)
+    //TITLESLOADED IS THE EVENT THAT IS TRIGGERED WHEN THE VISIBLE TITLES OF THE MAP ARE FULLY LOADED
+    window.google.maps.event.addListenerOnce(map, "tilesloaded", () => {
+      window.scrollTo(0, 0);
+    });
   };
   const divStyle = {
     backgroundColor: "ivory",
