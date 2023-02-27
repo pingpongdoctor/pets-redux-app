@@ -1,10 +1,14 @@
+@use "../styles/mixins" as *;
+
 .map {
   margin-top: 2rem;
+  border-radius: 10px;
 }
 
 .map__container {
   width: 100%;
   height: 100vh;
+  border-radius: inherit;
 }
 
 .map__search-box {
@@ -21,4 +25,20 @@
   width: fit-content;
   padding: 0.5rem;
   border-radius: 10px;
+}
+
+.map__btn {
+  @include small-mobile {
+    width: 80px;
+  }
+}
+
+.map__input {
+  width: 220px;
+  @include small-mobile {
+    width: 80px;
+  }
+  @include tablet-desktop {
+    width: 400px;
+  }
 }

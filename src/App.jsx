@@ -5,8 +5,11 @@ import { addPet, deletePet, updateOwner } from "./features/Pets";
 import { changeTheme } from "./features/ThemeColor";
 import GoogleMapComponent from "./components/GoogleMapComponent";
 import axios from "axios";
+import { useWindowSize } from "./utils/utils";
 
 function App() {
+  //GET CURRENT WINDOW SIZE
+  const currentWindowSize = useWindowSize().width;
   //USE DISPATCH METHOD TO RUN THE REDUCER FUNCTIONS
   const dispatch = useDispatch();
   //ACCESS THE STATE IN THE SLICE THROUGH USESELECTOR
@@ -30,14 +33,13 @@ function App() {
       const newArr = [];
       for (let i = 1; i <= arrLength; i++) {
         //GET DATA FROM CAT REST API
-        const response = await axios.get("https://cataas.com/cat?json=true");
-        newArr.push(response.data.url);
+        const response = await axios.get("https://aws.random.cat/meow");
+        newArr.push(response.data.file);
       }
       setImgLinkArr(newArr);
     };
     getImgData();
   }, [petArr]);
-
   //FUNCTIONS TO UPDATE PET AND OWNER NAMES
   const handleUpdatPetName = function (event) {
     setPetName(event.target.value);
@@ -132,7 +134,7 @@ function App() {
               }
             }}
           >
-            Change Color Theme
+            {currentWindowSize < 500 ? "Change Color" : "Change Color Theme"}
           </button>
         </div>
         <h1>List of pets and owners</h1>
@@ -161,7 +163,7 @@ function App() {
               <div className="App__flex-item" key={pet.id}>
                 <img
                   className="App__img"
-                  src={`https://cataas.com${imgLinkArr[index]}`}
+                  src={imgLinkArr[index]}
                   alt="cat-img"
                 />
                 <p>
@@ -210,8 +212,8 @@ function App() {
         >
           Reset the browser's local storage
         </button>
+        <GoogleMapComponent />
       </div>
-      <GoogleMapComponent />
     </div>
   );
 }
