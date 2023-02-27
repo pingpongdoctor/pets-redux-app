@@ -14,6 +14,8 @@ import { useWindowSize } from "../utils/utils";
 export default function GoogleMapComponent() {
   //GET CURRENT WINDOW SIZE
   const currentWindowSize = useWindowSize().width;
+  //STATE FOR AUTOCOMPLETE
+  const [autoComplete, setAutoComplete] = useState(null);
   //STATE FOR ZOOM
   const [zoom, setZoom] = useState(2);
   //STATE FOR THE FOUND PLACES
@@ -29,14 +31,14 @@ export default function GoogleMapComponent() {
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries: ["places"],
   });
-
   //FUNCTION TO CONVERT ADDRESS TO COORDINATE
   const coordinateConverter = function (address) {
     //CREATE A NEW GEOCODER
     const geocoder = new window.google.maps.Geocoder();
     //USE GEOCODER TO CONVERT ADDRESS TO COORDINATE
+    // console.log(address);
+    // console.log(inputAddress);
     geocoder.geocode({ address }, (results, status) => {
-      console.log(status);
       if (status === "OK") {
         const location = results[0].geometry.location;
         console.log(location);
@@ -138,7 +140,14 @@ export default function GoogleMapComponent() {
         }}
       >
         <div className="map__search-box">
-          <Autocomplete>
+          <Autocomplete
+            onLoad={(autocomplete) => {
+              setAutoComplete(autocomplete);
+            }}
+            onPlaceChanged={() => {
+              setInputAddress(autoComplete.getPlace().formatted_address);
+            }}
+          >
             <input
               className="map__input"
               onChange={(event) => {

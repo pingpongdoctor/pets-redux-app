@@ -40,7 +40,6 @@ function App() {
     };
     getImgData();
   }, [petArr]);
-  console.log(imgLinkArr);
   //FUNCTIONS TO UPDATE PET AND OWNER NAMES
   const handleUpdatPetName = function (event) {
     setPetName(event.target.value);
