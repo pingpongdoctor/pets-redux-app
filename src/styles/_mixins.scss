@@ -16,6 +16,18 @@
   }
 }
 
+@mixin less-than-960 {
+  @media (max-width: 960px) {
+    @content;
+  }
+}
+
+@mixin greater-than-960 {
+  @media (min-width: 960px) {
+    @content;
+  }
+}
+
 @mixin desktop {
   @media (min-width: 1280px) {
     @content;

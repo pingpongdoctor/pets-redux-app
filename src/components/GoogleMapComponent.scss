@@ -3,6 +3,7 @@
 .map {
   margin-top: 2rem;
   border-radius: 10px;
+  position: relative;
 }
 
 .map__container {
@@ -33,12 +34,62 @@
   }
 }
 
-.map__input {
-  width: 220px;
+.map__btn-nearby {
+  width: 230px;
+  @include less-than-960 {
+    display: none;
+  }
+}
+
+.map__btn-nearby-absolute {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  background-color: rgba(255, 0, 0, 0.719);
+  color: white;
+  font-weight: bold;
+  @include mobile {
+    width: 100px;
+    height: 100px;
+    font-size: 0.7rem;
+  }
   @include small-mobile {
     width: 80px;
+    height: 80px;
+    font-size: 0.6rem;
   }
-  @include tablet-desktop {
-    width: 400px;
+  @include greater-than-960 {
+    display: none;
   }
+}
+
+.map__input {
+  width: 40vw;
+  @include desktop {
+    width: 500px;
+  }
+}
+
+.map__infor-image {
+  width: 100%;
+}
+
+.map__infor-container {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  gap: 0.5rem;
+  p {
+    font-size: 1rem;
+    color: black;
+  }
+}
+
+.map__text {
+  font-size: 1.2rem;
+  color: rgba(0, 0, 0, 0.678);
+  font-weight: bold;
 }
