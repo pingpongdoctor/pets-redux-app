@@ -10,10 +10,22 @@ import {
 } from "@react-google-maps/api";
 import { useEffect, useState } from "react";
 import { useWindowSize } from "../utils/utils";
+import { convertNumberToArr } from "../utils/utils";
+
+const libraries = ["places"];
 
 export default function GoogleMapComponent() {
   //GET CURRENT WINDOW SIZE
   const currentWindowSize = useWindowSize().width;
+  //STATE FOR THE DETAIL INFOR ARR
+  const [detailArr, setDetailArr] = useState([]);
+  //STATE FOR THE INFOR WINDOW
+  const [isWindowOpen, setIsWindowOpen] = useState(true);
+  //STATE FOR THE SELECTED MARKER'S INFOR WINDOW
+  const [selectedMarker, setSelectedMarker] = useState({
+    index: null,
+    isOpen: false,
+  });
   //STATE FOR AUTOCOMPLETE
   const [autoComplete, setAutoComplete] = useState(null);
   //STATE FOR ZOOM
@@ -29,28 +41,65 @@ export default function GoogleMapComponent() {
   //USE USELOAD SCRIPT TO INTEGRATE GOOGLE MAP API
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
-    libraries: ["places"],
+    libraries,
   });
   //FUNCTION TO CONVERT ADDRESS TO COORDINATE
   const coordinateConverter = function (address) {
     //CREATE A NEW GEOCODER
     const geocoder = new window.google.maps.Geocoder();
     //USE GEOCODER TO CONVERT ADDRESS TO COORDINATE
-    // console.log(address);
-    // console.log(inputAddress);
     geocoder.geocode({ address }, (results, status) => {
       if (status === "OK") {
         const location = results[0].geometry.location;
-        console.log(location);
         setCurrentLocation({ lat: location.lat(), lng: location.lng() });
       }
     });
   };
+
+  //FUNCTION TO SHOW THE DETAILED INFOR WINDOW OF A PLACE
+  //SINCE THE METHOD GETDETAILS IS OPERATED ASYNCHRONOUSLY AND IT DOES NOT HANDLE A PROMISE
+  //WE NEED TO DEFINE A PROMISE TO HAULT THE CODE EXECUTION
+  const handleShowDetailInfor = async function (index) {
+    let newArr = [...detailArr];
+    const service = new window.google.maps.places.PlacesService(map);
+
+    const returnValue = await new Promise((resolve, reject) => {
+      service.getDetails(
+        {
+          placeId: nearPlaces[index].place_id,
+          fields: ["name", "formatted_address", "photos"],
+        },
+        (result, status) => {
+          if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+            resolve(result);
+          } else {
+            reject(status);
+          }
+        }
+      );
+    });
+
+    let newObj = {
+      name: returnValue.name,
+      description: returnValue.formatted_address,
+      image: returnValue.photos && returnValue.photos[1].getUrl(),
+    };
+    newArr.splice(index, 1, newObj);
+    setDetailArr(newArr);
+    setSelectedMarker({ index: index, isOpen: true });
+    //SHOW THE INFOR BOX
+    // const getAllBoxes = document.querySelectorAll(".map__infor-nearby");
+    // console.log(getAllBoxes);
+    // getAllBoxes[index].classList.remove(".map__infor-nearby");
+  };
+  useEffect(() => {
+    console.log(detailArr);
+  }, [detailArr]);
   //FUNCTION TO SEARCH NEARBY LOCATION BASED ON A PROVIDED LOCATION
   const handleSearchNearbyLocation = function (location) {
-    //DEFINE SERVICE BY USING PLACESERVICE METHOD
+    //DEFINE SERVICE BY USING PLACESERVICE PROP
     const service = new window.google.maps.places.PlacesService(map);
-    //USE NEARBYSEARCH METHOD TO SEARCH NEARBY VETERINARY_CARE
+    //USE NEARBYSEARCH PROP TO SEARCH NEARBY VETERINARY_CARE
     service.nearbySearch(
       //PROVIDE THE NEEDED INPUT DATA TO SEARCH LOCATIONS
       {
@@ -64,10 +113,14 @@ export default function GoogleMapComponent() {
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
           //SET THE PLACES TO THE NEARPLACES STATE
           setNearPlaces(results);
+          const newDetailArr = convertNumberToArr(results.length);
+          setDetailArr(newDetailArr);
         }
       }
     );
+    setIsWindowOpen(true);
   };
+
   //FUNCTION TO SET THE CURRENT LOCATION STATE BY USING HTML5 GEOLOCATION API
   const handleUpdateCurrentLocationBasedUserLocation = function () {
     if (navigator.geolocation) {
@@ -86,6 +139,8 @@ export default function GoogleMapComponent() {
   const handleUpdateCurrentLocationBasedInput = function () {
     if (inputAddress) {
       coordinateConverter(inputAddress);
+      setIsWindowOpen(true);
+      setNearPlaces("");
     } else {
       alert("Please input the address");
     }
@@ -104,13 +159,17 @@ export default function GoogleMapComponent() {
     setInputAddress("");
     nearPlaces("");
   };
+
   //DEFINE ONMAP LOAD FUNCTION
   const onMapLoad = (map) => {
     //SET THE MAP STATE WHICH IS USED TO RECENTER THE MAP
     setMap(map);
-  };
-  const divStyle = {
-    backgroundColor: "ivory",
+    //SCROLL TO THE TOP OF THE PAGE WHEN THE MAP IS FULLY LOADED (TITLESLOADED)
+    //IMPLEMENT ONLY IN THE FIRST TIME THE MAP IS RENDERRED ( USE ADDLISTENERONE AND IMPLEMENT IN ONLOAD PROP)
+    //TITLESLOADED IS THE EVENT THAT IS TRIGGERED WHEN THE VISIBLE TITLES OF THE MAP ARE FULLY LOADED
+    window.google.maps.event.addListenerOnce(map, "tilesloaded", () => {
+      window.scrollTo(0, 0);
+    });
   };
 
   //IF LOADING MAP PROCESS IS ERROR
@@ -122,6 +181,7 @@ export default function GoogleMapComponent() {
   if (!isLoaded) {
     return <div>Loading Map</div>;
   }
+
   //IF MAP IS COMPLETELY LOADED
   return (
     <div className="map">
@@ -156,14 +216,25 @@ export default function GoogleMapComponent() {
               type="text"
             />
           </Autocomplete>
+          {/* SUBMIT BUTTON */}
           <button
-            onClick={() => {
-              handleUpdateCurrentLocationBasedInput();
-            }}
+            onClick={handleUpdateCurrentLocationBasedInput}
             className="App__btn map__btn"
           >
-            {currentWindowSize < 500 ? "Submit" : " Submit Your Location"}
+            {currentWindowSize < 501 ? "Submit" : " Submit Your Location"}
           </button>
+          {/* BUTTON TO SHOW NEARBY LOCATIONS WHEN THE WINDOW SIZE IS GREATER THAN 960PX
+           */}
+          {currentLocation && (
+            <button
+              onClick={() => {
+                handleSearchNearbyLocation(currentLocation);
+              }}
+              className="App__btn map__btn map__btn-nearby"
+            >
+              Nearby Veterinary Health Center
+            </button>
+          )}
           {/* BUTTON TO RELLOCATE THE CURRENT LOCATION */}
           {currentLocation && (
             <IconContext.Provider value={{ color: "black", size: "1.5rem" }}>
@@ -171,6 +242,7 @@ export default function GoogleMapComponent() {
                 <div
                   onClick={() => {
                     map.panTo(currentLocation);
+                    setIsWindowOpen(true);
                   }}
                 >
                   <FaLocationArrow />
@@ -180,21 +252,63 @@ export default function GoogleMapComponent() {
           )}
         </div>
         {/* CURRENT LOCATION */}
-        {currentLocation && (
-          <InfoWindow position={currentLocation}>
-            <div style={divStyle}>
-              <h1 style={{ fontSize: "1rem" }}>Current Location</h1>
-            </div>
+        {currentLocation && isWindowOpen && (
+          <InfoWindow
+            onCloseClick={() => {
+              setIsWindowOpen(false);
+            }}
+            position={currentLocation}
+          >
+            <p className="map__text">You are here</p>
           </InfoWindow>
         )}
         {/* NEARBY LOCATIONS */}
         {nearPlaces.length > 0 &&
-          nearPlaces.map((place) => (
+          nearPlaces.map((place, index) => (
             <Marker
               key={place.place_id}
               position={place.geometry.location}
-            ></Marker>
+              animation={window.google.maps.Animation.DROP} //GOOGLE IS DEFINED SINCE THE MAP HAS LOADED
+              onClick={() => {
+                handleShowDetailInfor(index);
+              }}
+            >
+              {detailArr.length > 0 &&
+                typeof detailArr[index] !== "number" &&
+                index === selectedMarker.index &&
+                selectedMarker.isOpen === true && (
+                  <InfoWindow
+                    onCloseClick={() => {
+                      setSelectedMarker({ index: null, isOpen: false });
+                    }}
+                    position={place.geometry.location}
+                  >
+                    <div className="map__infor-container" id={index}>
+                      <h2>{detailArr[index].name}</h2>
+                      <p>
+                        <strong>Address:</strong> {detailArr[index].description}
+                      </p>
+                      <img
+                        className="map__infor-image"
+                        src={detailArr[index].image}
+                        alt="pic"
+                      />
+                    </div>
+                  </InfoWindow>
+                )}
+            </Marker>
           ))}
+        {/* BUTTON SHOWS NEARBY LOCATIONS WHEN THE SCREEN IS LESS THAN 960PX */}
+        {currentLocation && (
+          <button
+            onClick={() => {
+              handleSearchNearbyLocation(currentLocation);
+            }}
+            className="App__btn map__btn-nearby-absolute"
+          >
+            Show Nearby Veterinary Health Center
+          </button>
+        )}
       </GoogleMap>
     </div>
   );
