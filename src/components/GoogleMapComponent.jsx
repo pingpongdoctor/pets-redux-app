@@ -7,6 +7,7 @@ import {
   Marker,
   InfoWindow,
   Autocomplete,
+  DirectionsRenderer,
 } from "@react-google-maps/api";
 import { useEffect, useState } from "react";
 import { useWindowSize } from "../utils/utils";
@@ -17,6 +18,7 @@ const libraries = ["places"];
 export default function GoogleMapComponent() {
   //GET CURRENT WINDOW SIZE
   const currentWindowSize = useWindowSize().width;
+  const [direction, setDirection] = useState(null);
   //STATE FOR THE DETAIL INFOR ARR
   const [detailArr, setDetailArr] = useState([]);
   //STATE FOR THE INFOR WINDOW
@@ -63,7 +65,7 @@ export default function GoogleMapComponent() {
   const handleShowDetailInfor = async function (index) {
     let newArr = [...detailArr];
     const service = new window.google.maps.places.PlacesService(map);
-
+    //CREATE A PROMISE
     const returnValue = await new Promise((resolve, reject) => {
       service.getDetails(
         {
@@ -142,19 +144,36 @@ export default function GoogleMapComponent() {
     }
   };
 
+  //FUNCTION TO HANDLE IMPLEMENT ROUTES
+  const handleRoute = async function (destination) {
+    //USE DIRECTION SERVICE METHOD FROM GOOGLE MAP API
+    const directionService = new window.google.maps.DirectionsService();
+    //GET USE ROUTE MEHOD TO DESIGN ROUTES
+    //BECAUSE DIRECTIONSERVICE METHOD HANDLE A PROMISE SO THAT WE CAN USE THE AWAIT KEYWORD
+    await directionService.route(
+      {
+        origin: currentLocation,
+        destination: destination,
+        travelMode: window.google.maps.TravelMode.DRIVING,
+      },
+      (results, status) => {
+        if (status === window.google.maps.DirectionsStatus.OK) {
+          setDirection({
+            response: results,
+            duration: results.routes[0].legs[0].distance.text,
+            distance: results.routes[0].legs[0].duration.text,
+          });
+        }
+      }
+    );
+  };
+
   //USEEFFECT TO SEARCH NEARBY LOCATIONS WHEN THE CURRENT LOCATION IS AVAILABLE
   useEffect(() => {
     if (currentLocation) {
       setZoom(13);
     }
   });
-
-  //FUNCTION TO CLEAR THE LOCATION
-  const clearLocation = function () {
-    setCurrentLocation("");
-    setInputAddress("");
-    nearPlaces("");
-  };
 
   //DEFINE ONMAP LOAD FUNCTION
   const onMapLoad = (map) => {
@@ -271,6 +290,7 @@ export default function GoogleMapComponent() {
                 map.panTo(place.geometry.location);
               }}
             >
+              {/* INFORWINDOWS OF NEARBY LOCATIONS */}
               {detailArr.length > 0 &&
                 typeof detailArr[index] !== "number" &&
                 index === selectedMarker.index &&
@@ -282,15 +302,31 @@ export default function GoogleMapComponent() {
                     position={place.geometry.location}
                   >
                     <div className="map__infor-container" id={index}>
-                      <h2>{detailArr[index].name}</h2>
-                      <p>
-                        <strong>Address:</strong> {detailArr[index].description}
-                      </p>
                       <img
                         className="map__infor-image"
                         src={detailArr[index].image}
                         alt="pic"
                       />
+                      <h2>{detailArr[index].name}</h2>
+                      <p>
+                        <strong>Address:</strong> {detailArr[index].description}
+                      </p>
+                      <button
+                        onClick={() => {
+                          handleRoute(place.geometry.location);
+                          setSelectedMarker({ index: null, isOpen: false });
+                          setIsWindowOpen(true);
+                        }}
+                      >
+                        Transit to this place
+                      </button>
+                      <button
+                        onClick={() => {
+                          handleRoute(place.geometry.location);
+                        }}
+                      >
+                        Drive to this place
+                      </button>
                     </div>
                   </InfoWindow>
                 )}
@@ -305,6 +341,21 @@ export default function GoogleMapComponent() {
             className="App__btn map__btn-nearby-absolute"
           >
             Show Nearby Veterinary Health Center
+          </button>
+        )}
+        {/* DIRECTION RENDERER */}
+        {direction && direction.response && (
+          <DirectionsRenderer directions={direction.response} />
+        )}
+        {/* CLEAR ROUTE BUTTON */}
+        {direction && direction.response && (
+          <button
+            className="map__btn-clear-routes"
+            onClick={() => {
+              setDirection(null);
+            }}
+          >
+            Clear Routes
           </button>
         )}
       </GoogleMap>
