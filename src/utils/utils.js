@@ -19,3 +19,11 @@ export function useWindowSize() {
   }, []);
   return windowSize;
 }
+//FUNCTION CONVERTING A NUMBDER TO AN ARRAY OF ASCENDING ARRAY OF NUMBERS (ex: 4 -> [1,2,3,4])
+export const convertNumberToArr = function (number) {
+  const arr = [];
+  for (let i = 1; i <= number; i++) {
+    arr.push(i);
+  }
+  return arr;
+};
