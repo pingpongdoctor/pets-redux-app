@@ -114,6 +114,7 @@ function App() {
   return (
     <div style={{ color: currentTheme }} className="App">
       <div className="App__container">
+        {/* CHANGE COLOR THEME */}
         <div className="App__color-theme-wrapper">
           <input
             value={color}
@@ -212,6 +213,7 @@ function App() {
         >
           Reset the browser's local storage
         </button>
+        {/* GOOGLE MAP */}
         <GoogleMapComponent />
       </div>
     </div>

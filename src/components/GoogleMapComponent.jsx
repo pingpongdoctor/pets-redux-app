@@ -43,8 +43,9 @@ export default function GoogleMapComponent() {
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries,
   });
+
   //FUNCTION TO CONVERT ADDRESS TO COORDINATE
-  const coordinateConverter = function (address) {
+  const converteCoordinateAndUpdateState = function (address) {
     //CREATE A NEW GEOCODER
     const geocoder = new window.google.maps.Geocoder();
     //USE GEOCODER TO CONVERT ADDRESS TO COORDINATE
@@ -82,19 +83,14 @@ export default function GoogleMapComponent() {
     let newObj = {
       name: returnValue.name,
       description: returnValue.formatted_address,
-      image: returnValue.photos && returnValue.photos[1].getUrl(),
+      image: returnValue.photos && returnValue.photos[0].getUrl(),
     };
+
     newArr.splice(index, 1, newObj);
     setDetailArr(newArr);
     setSelectedMarker({ index: index, isOpen: true });
-    //SHOW THE INFOR BOX
-    // const getAllBoxes = document.querySelectorAll(".map__infor-nearby");
-    // console.log(getAllBoxes);
-    // getAllBoxes[index].classList.remove(".map__infor-nearby");
   };
-  useEffect(() => {
-    console.log(detailArr);
-  }, [detailArr]);
+
   //FUNCTION TO SEARCH NEARBY LOCATION BASED ON A PROVIDED LOCATION
   const handleSearchNearbyLocation = function (location) {
     //DEFINE SERVICE BY USING PLACESERVICE PROP
@@ -138,7 +134,7 @@ export default function GoogleMapComponent() {
   //FUNCTION TO UPDATE THE CURRENTLOCATION STATE BASED ON THE INPUT ADDRESS
   const handleUpdateCurrentLocationBasedInput = function () {
     if (inputAddress) {
-      coordinateConverter(inputAddress);
+      converteCoordinateAndUpdateState(inputAddress);
       setIsWindowOpen(true);
       setNearPlaces("");
     } else {
@@ -199,6 +195,7 @@ export default function GoogleMapComponent() {
           fullscreenControl: false,
         }}
       >
+        {/* AUTOCOMPLETE BOX */}
         <div className="map__search-box">
           <Autocomplete
             onLoad={(autocomplete) => {
@@ -271,6 +268,7 @@ export default function GoogleMapComponent() {
               animation={window.google.maps.Animation.DROP} //GOOGLE IS DEFINED SINCE THE MAP HAS LOADED
               onClick={() => {
                 handleShowDetailInfor(index);
+                map.panTo(place.geometry.location);
               }}
             >
               {detailArr.length > 0 &&
