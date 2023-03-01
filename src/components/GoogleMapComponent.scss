@@ -66,6 +66,19 @@
   }
 }
 
+.map__btn-clear-routes {
+  @extend .map__btn-nearby-absolute;
+  left: 2rem;
+  border: none;
+  transition: transform 0.6s;
+  &:active {
+    transform: scale(0.96);
+  }
+  @include greater-than-960 {
+    display: block;
+  }
+}
+
 .map__input {
   width: 40vw;
   @include desktop {
@@ -74,7 +87,10 @@
 }
 
 .map__infor-image {
-  width: 100%;
+  width: auto;
+  max-height: 200px;
+  object-fit: cover;
+  object-position: center;
 }
 
 .map__infor-container {
