@@ -113,109 +113,119 @@ function App() {
 
   return (
     <div style={{ color: currentTheme }} className="App">
-      <div className="App__container">
-        {/* CHANGE COLOR THEME */}
-        <div className="App__color-theme-wrapper">
-          <input
-            value={color}
-            onChange={(event) => {
-              setColor(event.target.value);
-            }}
-            type="text"
-            placeholder="Input color here..."
-          />
+      <div className="App__cat">
+        <div className="App__cat-containers">
+          {/* CHANGE COLOR THEME */}
+          <div className="App__color-theme-wrapper">
+            <input
+              value={color}
+              onChange={(event) => {
+                setColor(event.target.value);
+              }}
+              type="text"
+              placeholder="Input color here..."
+            />
+            <button
+              className="App__btn"
+              style={{ backgroundColor: currentTheme }}
+              onClick={() => {
+                if (isColorValid()) {
+                  dispatch(changeTheme(color));
+                  alert(`Color theme has been changed to ${color}`);
+                } else {
+                  alert("Please input the color!");
+                }
+              }}
+            >
+              {currentWindowSize < 500 ? "Change Color" : "Change Color Theme"}
+            </button>
+          </div>
+          <h1>List of pets and owners</h1>
+          {/* ADD PET */}
+          <div className="App__add-pet-wrapper">
+            <input
+              value={petName}
+              onChange={handleUpdatPetName}
+              type="text"
+              placeholder="pet name..."
+            />
+            <input
+              value={ownerName}
+              onChange={handleUpdatOwnerName}
+              type="text"
+              placeholder="owner name..."
+            />
+            <button
+              className="App__btn"
+              style={{ backgroundColor: currentTheme }}
+              onClick={handleAddPet}
+            >
+              Add pet
+            </button>
+          </div>
+          {/* RENDER PETS */}
+          <div className="App__flex-container">
+            {petArr.length > 0 &&
+              petArr.map((pet, index) => (
+                <div className="App__flex-item" key={pet.id}>
+                  <img
+                    className="App__img"
+                    src={imgLinkArr[index]}
+                    alt="cat-img"
+                  />
+                  <p>
+                    {" "}
+                    <strong>Id:</strong> {pet.id}
+                  </p>
+                  <p>
+                    <strong>Pet name:</strong> {pet.name}
+                  </p>
+                  <p>
+                    {" "}
+                    <strong>Owner name:</strong> {pet.owner}
+                  </p>
+                  <input
+                    onChange={handleUpdateNewOwner}
+                    type="text"
+                    placeholder="New owner..."
+                    id="new-owner-input"
+                  />
+                  <button
+                    className="App__btn"
+                    style={{ backgroundColor: currentTheme }}
+                    onClick={() => {
+                      handleSetNewOwner(pet.id);
+                      document.getElementById("new-owner-input").value = "";
+                    }}
+                  >
+                    Add new owner
+                  </button>
+                  <button
+                    className="App__btn"
+                    style={{ backgroundColor: currentTheme }}
+                    onClick={() => {
+                      handleDeletePet(pet.id);
+                    }}
+                  >
+                    Delete pet
+                  </button>
+                </div>
+              ))}
+          </div>
           <button
-            className="App__btn"
+            className="App__btn App__reset-button"
+            style={{ backgroundColor: currentTheme }}
             onClick={() => {
-              if (isColorValid()) {
-                dispatch(changeTheme(color));
-                alert(`Color theme has been changed to ${color}`);
-              } else {
-                alert("Please input the color!");
-              }
+              localStorage.clear();
+              window.location.reload(); //USE THIS TO RELOAD THE CURRENT PAGE
             }}
           >
-            {currentWindowSize < 500 ? "Change Color" : "Change Color Theme"}
+            Reset the browser's local storage
           </button>
         </div>
-        <h1>List of pets and owners</h1>
-        {/* ADD PET */}
-        <div className="App__add-pet-wrapper">
-          <input
-            value={petName}
-            onChange={handleUpdatPetName}
-            type="text"
-            placeholder="pet name..."
-          />
-          <input
-            value={ownerName}
-            onChange={handleUpdatOwnerName}
-            type="text"
-            placeholder="owner name..."
-          />
-          <button className="App__btn" onClick={handleAddPet}>
-            Add pet
-          </button>
-        </div>
-        {/* RENDER PETS */}
-        <div className="App__flex-container">
-          {petArr.length > 0 &&
-            petArr.map((pet, index) => (
-              <div className="App__flex-item" key={pet.id}>
-                <img
-                  className="App__img"
-                  src={imgLinkArr[index]}
-                  alt="cat-img"
-                />
-                <p>
-                  {" "}
-                  <strong>Id:</strong> {pet.id}
-                </p>
-                <p>
-                  <strong>Pet name:</strong> {pet.name}
-                </p>
-                <p>
-                  {" "}
-                  <strong>Owner name:</strong> {pet.owner}
-                </p>
-                <input
-                  onChange={handleUpdateNewOwner}
-                  type="text"
-                  placeholder="New owner..."
-                  id="new-owner-input"
-                />
-                <button
-                  className="App__btn"
-                  onClick={() => {
-                    handleSetNewOwner(pet.id);
-                    document.getElementById("new-owner-input").value = "";
-                  }}
-                >
-                  Add new owner
-                </button>
-                <button
-                  className="App__btn"
-                  onClick={() => {
-                    handleDeletePet(pet.id);
-                  }}
-                >
-                  Delete pet
-                </button>
-              </div>
-            ))}
-        </div>
-        <button
-          className="App__btn App__reset-button"
-          onClick={() => {
-            localStorage.clear();
-            window.location.reload(); //USE THIS TO RELOAD THE CURRENT PAGE
-          }}
-        >
-          Reset the browser's local storage
-        </button>
-        {/* GOOGLE MAP */}
-        <GoogleMapComponent />
       </div>
+      {/* GOOGLE MAP */}
+      <GoogleMapComponent />
     </div>
   );
 }

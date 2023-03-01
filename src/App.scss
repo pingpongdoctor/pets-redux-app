@@ -7,7 +7,6 @@
 body {
   margin: 0;
   text-align: center;
-  background-color: rgba(0, 0, 0, 0.438);
 }
 
 h1 {
@@ -29,19 +28,6 @@ input {
 }
 
 .App {
-  @include mobile {
-    margin: 1rem;
-  }
-  @include tablet-desktop {
-    margin: 1rem 2rem;
-  }
-
-  &__container {
-    @include desktop {
-      margin: 0 auto;
-      max-width: 1216px;
-    }
-  }
   &__flex-container {
     display: flex;
     flex-wrap: wrap;
@@ -51,13 +37,15 @@ input {
     @include mobile {
       justify-content: center;
     }
+    @include tablet-desktop {
+      gap: 2rem;
+    }
   }
 
   &__btn {
     padding: 1rem;
     border: none;
     border-radius: 5px;
-    background-color: blue;
     color: white;
     transition: transform 0.5s;
     width: 160px;
@@ -73,7 +61,7 @@ input {
 
   &__flex-item {
     border: 1px rgba(128, 128, 128, 0.212) solid;
-    width: 49%;
+    width: 48%;
     padding: 2rem 0;
     border-radius: 5px;
     box-shadow: 0px 1px 16px -6px rgba(0, 0, 0, 0.6);
@@ -100,6 +88,11 @@ input {
 
   &__reset-button {
     margin-top: 1rem;
+    width: 250px;
+    height: 55px;
+    @include tablet-desktop {
+      margin-top: 2rem;
+    }
   }
 
   &__color-theme-wrapper {
@@ -111,5 +104,20 @@ input {
   &__img {
     width: 80%;
     aspect-ratio: 1/1;
+  }
+
+  &__cat {
+    background-color: rgba(0, 0, 0, 0.031);
+    padding: 2rem 1rem;
+    @include tablet-desktop {
+      padding: 3rem 2rem;
+    }
+  }
+
+  &__cat-containers {
+    @include desktop {
+      margin: 0 auto;
+      max-width: 1216px;
+    }
   }
 }
