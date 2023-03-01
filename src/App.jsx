@@ -6,6 +6,7 @@ import { changeTheme } from "./features/ThemeColor";
 import GoogleMapComponent from "./components/GoogleMapComponent";
 import axios from "axios";
 import { useWindowSize } from "./utils/utils";
+import videoBackground from "./assets/videos/background-video.mp4";
 
 function App() {
   //GET CURRENT WINDOW SIZE
@@ -114,6 +115,13 @@ function App() {
   return (
     <div style={{ color: currentTheme }} className="App">
       <div className="App__cat">
+        <video
+          muted
+          loop
+          autoPlay
+          className="App__video-background"
+          src={videoBackground}
+        ></video>
         <div className="App__cat-containers">
           <h1 className="App__heading">List of pets and owners</h1>
           {/* ADD PET */}

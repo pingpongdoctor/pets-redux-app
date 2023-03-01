@@ -1,8 +1,9 @@
 @use "../styles/mixins" as *;
 
 .map {
-  background-color: white;
   padding-top: 1.5rem;
+  z-index: 1;
+  position: relative;
   @include tablet-desktop {
     padding-top: 2.5rem;
   }
@@ -16,6 +17,12 @@
 
   &__heading {
     margin-top: 0;
+    background-color: rgba(255, 255, 240, 0.778);
+    width: fit-content;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    margin: 0 auto;
+    margin-bottom: 1.5rem;
   }
 
   &__element {
