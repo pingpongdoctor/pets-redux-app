@@ -10,12 +10,6 @@
   }
 }
 
-@mixin tablet-desktop {
-  @media (min-width: 833px) {
-    @content;
-  }
-}
-
 @mixin less-than-960 {
   @media (max-width: 960px) {
     @content;
@@ -24,6 +18,12 @@
 
 @mixin greater-than-960 {
   @media (min-width: 960px) {
+    @content;
+  }
+}
+
+@mixin tablet-desktop {
+  @media (min-width: 833px) {
     @content;
   }
 }

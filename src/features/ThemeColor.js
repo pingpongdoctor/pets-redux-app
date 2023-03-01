@@ -5,7 +5,7 @@ const themeLocalStorage = localStorage.getItem("themeLocalStorage");
 console.log(themeLocalStorage);
 const themeSlice = createSlice({
   name: "theme",
-  initialState: { value: themeLocalStorage ? themeLocalStorage : "blue" },
+  initialState: { value: themeLocalStorage ? themeLocalStorage : "black" },
   reducers: {
     //REDUCER TO IMPLEMENT THE CHANGE COLOR THEME ACTION
     changeTheme: (state, action) => {
