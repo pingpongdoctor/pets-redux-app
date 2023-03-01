@@ -1,111 +1,120 @@
 @use "../styles/mixins" as *;
 
 .map {
-  margin-top: 2rem;
-  border-radius: 10px;
-  position: relative;
-}
-
-.map__container {
-  width: 100%;
-  height: 100vh;
-  border-radius: inherit;
-}
-
-.map__search-box {
-  position: absolute;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  top: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  background-color: ivory;
-  width: fit-content;
-  padding: 0.5rem;
-  border-radius: 10px;
-}
-
-.map__btn {
-  @include small-mobile {
-    width: 80px;
+  background-color: rgba(215, 207, 207, 0.126);
+  padding-bottom: 1rem;
+  @include tablet-desktop {
+    padding-bottom: 2rem;
   }
-}
 
-.map__btn-nearby {
-  width: 230px;
-  @include less-than-960 {
-    display: none;
+  &__container {
+    @include desktop {
+      margin: 0 auto;
+      max-width: 1280px;
+    }
   }
-}
 
-.map__btn-nearby-absolute {
-  position: absolute;
-  bottom: 2rem;
-  right: 2rem;
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  background-color: rgba(255, 0, 0, 0.719);
-  color: white;
-  font-weight: bold;
-  @include mobile {
-    width: 100px;
-    height: 100px;
-    font-size: 0.7rem;
+  &__element {
+    width: 100%;
+    height: 100vh;
+    border-radius: 10px;
+    position: relative;
   }
-  @include small-mobile {
-    width: 80px;
-    height: 80px;
-    font-size: 0.6rem;
-  }
-  @include greater-than-960 {
-    display: none;
-  }
-}
 
-.map__btn-clear-routes {
-  @extend .map__btn-nearby-absolute;
-  left: 2rem;
-  border: none;
-  transition: transform 0.6s;
-  &:active {
-    transform: scale(0.96);
+  &__search-box {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    background-color: ivory;
+    width: fit-content;
+    padding: 0.5rem;
+    border-radius: 10px;
   }
-  @include greater-than-960 {
-    display: block;
+
+  &__btn {
+    @include small-mobile {
+      width: 80px;
+    }
   }
-}
 
-.map__input {
-  width: 40vw;
-  @include desktop {
-    width: 500px;
+  &__btn-nearby {
+    width: 230px;
+    @include less-than-960 {
+      display: none;
+    }
   }
-}
 
-.map__infor-image {
-  width: auto;
-  max-height: 200px;
-  object-fit: cover;
-  object-position: center;
-}
-
-.map__infor-container {
-  display: flex;
-  flex-direction: column;
-  width: 300px;
-  gap: 0.5rem;
-  p {
-    font-size: 1rem;
-    color: black;
+  &__btn-nearby-absolute {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    color: white;
+    font-weight: bold;
+    @include mobile {
+      width: 100px;
+      height: 100px;
+      font-size: 0.7rem;
+    }
+    @include small-mobile {
+      width: 80px;
+      height: 80px;
+      font-size: 0.6rem;
+    }
+    @include greater-than-960 {
+      display: none;
+    }
   }
-}
 
-.map__text {
-  font-size: 1.2rem;
-  color: rgba(0, 0, 0, 0.678);
-  font-weight: bold;
+  &__btn-clear-routes {
+    @extend .map__btn-nearby-absolute;
+    left: 2rem;
+    border: none;
+    transition: transform 0.6s;
+    &:active {
+      transform: scale(0.96);
+    }
+    @include greater-than-960 {
+      display: block;
+    }
+  }
+
+  &__input {
+    width: 40vw;
+    @include desktop {
+      width: 500px;
+    }
+  }
+
+  &__infor-image {
+    width: auto;
+    max-height: 200px;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  &__infor-container {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    gap: 0.5rem;
+    p {
+      font-size: 1rem;
+      color: black;
+    }
+  }
+
+  &__text {
+    font-size: 1.2rem;
+    color: rgba(0, 0, 0, 0.678);
+    font-weight: bold;
+  }
 }
