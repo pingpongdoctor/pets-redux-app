@@ -1,10 +1,10 @@
 @use "../styles/mixins" as *;
 
 .map {
-  background-color: rgba(215, 207, 207, 0.126);
-  padding-bottom: 1rem;
+  background-color: white;
+  padding-top: 1.5rem;
   @include tablet-desktop {
-    padding-bottom: 2rem;
+    padding-top: 2.5rem;
   }
 
   &__container {
@@ -14,10 +14,15 @@
     }
   }
 
+  &__heading {
+    margin-top: 0;
+  }
+
   &__element {
     width: 100%;
     height: 100vh;
-    border-radius: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     position: relative;
   }
 
@@ -28,13 +33,22 @@
     margin: 0 auto;
     top: 1rem;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
     background-color: ivory;
     width: fit-content;
     padding: 0.5rem;
     border-radius: 10px;
+    z-index: 20;
+    align-items: flex-start;
+  }
+
+  &__big-wrapper {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
   }
 
   &__btn {
@@ -116,5 +130,14 @@
     font-size: 1.2rem;
     color: rgba(0, 0, 0, 0.678);
     font-weight: bold;
+  }
+
+  &__dis-dur {
+    color: red;
+    display: flex;
+    gap: 0.3rem;
+    p {
+      font-size: 1.2rem;
+    }
   }
 }

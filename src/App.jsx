@@ -115,6 +115,29 @@ function App() {
     <div style={{ color: currentTheme }} className="App">
       <div className="App__cat">
         <div className="App__cat-containers">
+          <h1 className="App__heading">List of pets and owners</h1>
+          {/* ADD PET */}
+          <div className="App__add-pet-wrapper">
+            <input
+              value={petName}
+              onChange={handleUpdatPetName}
+              type="text"
+              placeholder="pet name..."
+            />
+            <input
+              value={ownerName}
+              onChange={handleUpdatOwnerName}
+              type="text"
+              placeholder="owner name..."
+            />
+            <button
+              className="App__btn"
+              style={{ backgroundColor: currentTheme }}
+              onClick={handleAddPet}
+            >
+              Add pet
+            </button>
+          </div>
           {/* CHANGE COLOR THEME */}
           <div className="App__color-theme-wrapper">
             <input
@@ -140,29 +163,6 @@ function App() {
               {currentWindowSize < 500 ? "Change Color" : "Change Color Theme"}
             </button>
           </div>
-          <h1>List of pets and owners</h1>
-          {/* ADD PET */}
-          <div className="App__add-pet-wrapper">
-            <input
-              value={petName}
-              onChange={handleUpdatPetName}
-              type="text"
-              placeholder="pet name..."
-            />
-            <input
-              value={ownerName}
-              onChange={handleUpdatOwnerName}
-              type="text"
-              placeholder="owner name..."
-            />
-            <button
-              className="App__btn"
-              style={{ backgroundColor: currentTheme }}
-              onClick={handleAddPet}
-            >
-              Add pet
-            </button>
-          </div>
           {/* RENDER PETS */}
           <div className="App__flex-container">
             {petArr.length > 0 &&
@@ -173,42 +173,45 @@ function App() {
                     src={imgLinkArr[index]}
                     alt="cat-img"
                   />
-                  <p>
-                    {" "}
-                    <strong>Id:</strong> {pet.id}
-                  </p>
-                  <p>
-                    <strong>Pet name:</strong> {pet.name}
-                  </p>
-                  <p>
-                    {" "}
-                    <strong>Owner name:</strong> {pet.owner}
-                  </p>
-                  <input
-                    onChange={handleUpdateNewOwner}
-                    type="text"
-                    placeholder="New owner..."
-                    id="new-owner-input"
-                  />
-                  <button
-                    className="App__btn"
-                    style={{ backgroundColor: currentTheme }}
-                    onClick={() => {
-                      handleSetNewOwner(pet.id);
-                      document.getElementById("new-owner-input").value = "";
-                    }}
-                  >
-                    Add new owner
-                  </button>
-                  <button
-                    className="App__btn"
-                    style={{ backgroundColor: currentTheme }}
-                    onClick={() => {
-                      handleDeletePet(pet.id);
-                    }}
-                  >
-                    Delete pet
-                  </button>
+                  <div className="App__pet-owner-infor">
+                    <p>
+                      {" "}
+                      <strong>Id:</strong> {pet.id}
+                    </p>
+                    <p>
+                      <strong>Pet name:</strong> {pet.name}
+                    </p>
+                    <p>
+                      {" "}
+                      <strong>Owner name:</strong> {pet.owner}
+                    </p>
+                    <input
+                      onChange={handleUpdateNewOwner}
+                      type="text"
+                      placeholder="New owner..."
+                      id="new-owner-input"
+                      className="App__input-pet"
+                    />
+                    <button
+                      className="App__btn App__btn-pet"
+                      style={{ backgroundColor: currentTheme }}
+                      onClick={() => {
+                        handleSetNewOwner(pet.id);
+                        document.getElementById("new-owner-input").value = "";
+                      }}
+                    >
+                      Add new owner
+                    </button>
+                    <button
+                      className="App__btn App__btn-pet"
+                      style={{ backgroundColor: currentTheme }}
+                      onClick={() => {
+                        handleDeletePet(pet.id);
+                      }}
+                    >
+                      Delete pet
+                    </button>
+                  </div>
                 </div>
               ))}
           </div>

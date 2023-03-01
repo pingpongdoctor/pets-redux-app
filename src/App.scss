@@ -10,11 +10,18 @@ body {
 }
 
 h1 {
-  font-size: 4rem;
+  font-size: 2.5rem;
+  line-height: 2.5rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  @include tablet-desktop {
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+  }
 }
-
 p {
-  font-size: 2rem;
+  font-size: 1rem;
   margin: 0;
 }
 
@@ -28,18 +35,8 @@ input {
 }
 
 .App {
-  &__flex-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: space-between;
-    align-items: stretch;
-    @include mobile {
-      justify-content: center;
-    }
-    @include tablet-desktop {
-      gap: 2rem;
-    }
+  &__heading {
+    margin-top: 0;
   }
 
   &__btn {
@@ -59,35 +56,73 @@ input {
     }
   }
 
+  &__btn-pet,
+  &__input-pet {
+    width: 100%;
+  }
+
+  &__flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: center;
+    gap: 1.5rem;
+    @include tablet-desktop {
+      justify-content: start;
+      gap: 15px;
+    }
+    @include desktop {
+      gap: 26.6px;
+    }
+  }
+
   &__flex-item {
     border: 1px rgba(128, 128, 128, 0.212) solid;
-    width: 48%;
-    padding: 2rem 0;
-    border-radius: 5px;
+    padding-bottom: 2rem;
+    border-radius: 10px;
     box-shadow: 0px 1px 16px -6px rgba(0, 0, 0, 0.6);
+    background-color: rgba(255, 255, 240, 0.778);
+    width: 100%;
+    input {
+      margin-top: 0.8rem;
+    }
+    @include tablet-desktop {
+      width: calc((100% / 3) - 10px);
+    }
+    @include desktop {
+      width: calc((100% / 4) - 20px);
+    }
+    @include tablet-desktop {
+      padding-bottom: 1rem;
+    }
+  }
+
+  &__pet-owner-infor {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    gap: 1rem;
-    background-color: rgba(255, 255, 240, 0.778);
-    @include mobile {
-      width: 70%;
+    gap: 0.5rem;
+    padding: 0 2rem;
+    @include tablet-desktop {
+      padding: 0 1rem;
     }
   }
 
   &__add-pet-wrapper {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     display: flex;
     gap: 1rem;
     justify-content: center;
     input {
       padding-left: 1rem;
     }
+    @include tablet-desktop {
+      margin-bottom: 1.5rem;
+    }
   }
 
   &__reset-button {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     width: 250px;
     height: 55px;
     @include tablet-desktop {
@@ -99,11 +134,15 @@ input {
     display: flex;
     gap: 1rem;
     justify-content: center;
+    margin-bottom: 2rem;
   }
 
   &__img {
-    width: 80%;
-    aspect-ratio: 1/1;
+    width: 100%;
+    aspect-ratio: 1;
+    margin-bottom: 1rem;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
   }
 
   &__cat {
