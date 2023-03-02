@@ -13,6 +13,9 @@ import { useEffect, useState } from "react";
 import { useWindowSize } from "../utils/utils";
 import { convertNumberToArr } from "../utils/utils";
 import { useSelector } from "react-redux";
+import Aos from "aos";
+import "aos/dist/aos.css";
+Aos.init();
 
 const libraries = ["places"];
 
@@ -216,56 +219,190 @@ export default function GoogleMapComponent() {
   //IF MAP IS COMPLETELY LOADED
   return (
     <div className="map">
-      <div className="map__big-container">
-        <h1 className="map__heading">
-          Search nearby veterinary health centers
-        </h1>
-        <GoogleMap
-          mapContainerClassName="map__element"
-          zoom={zoom}
-          center={currentLocation ? currentLocation : { lat: 0, lng: 0 }}
-          mapTypeId="roadmap"
-          onLoad={onMapLoad}
-          options={{
-            zoomControl: false,
-            streetViewControl: false,
-            mapTypeControl: false,
-            fullscreenControl: false,
-          }}
-        >
-          {/* AUTOCOMPLETE BOX */}
-          <div className="map__search-box">
-            <div className="map__big-wrapper">
-              <Autocomplete
-                onLoad={(autocomplete) => {
-                  setAutoComplete(autocomplete);
-                }}
-                onPlaceChanged={() => {
-                  setInputAddress(autoComplete.getPlace().formatted_address);
-                }}
-              >
-                <input
-                  className="map__input"
-                  onChange={(event) => {
-                    setInputAddress(event.target.value);
+      {currentWindowSize && (
+        <div className="map__big-container">
+          <h1
+            data-aos="fade-up"
+            data-aos-duration={currentWindowSize > 832 ? "900" : "600"}
+            data-aos-delay={currentWindowSize > 832 ? "800" : "500"}
+            className="map__heading"
+          >
+            Search nearby veterinary health centers
+          </h1>
+          <div
+            data-aos="fade-up"
+            data-aos-duration={currentWindowSize > 832 ? "900" : "600"}
+            data-aos-delay={currentWindowSize > 832 ? "800" : "500"}
+          >
+            <GoogleMap
+              mapContainerClassName="map__element"
+              zoom={zoom}
+              center={currentLocation ? currentLocation : { lat: 0, lng: 0 }}
+              mapTypeId="roadmap"
+              onLoad={onMapLoad}
+              options={{
+                zoomControl: false,
+                streetViewControl: false,
+                mapTypeControl: false,
+                fullscreenControl: false,
+              }}
+            >
+              {/* AUTOCOMPLETE BOX */}
+              <div className="map__search-box">
+                <div className="map__big-wrapper">
+                  <Autocomplete
+                    onLoad={(autocomplete) => {
+                      setAutoComplete(autocomplete);
+                    }}
+                    onPlaceChanged={() => {
+                      setInputAddress(
+                        autoComplete.getPlace().formatted_address
+                      );
+                    }}
+                  >
+                    <input
+                      className="map__input"
+                      onChange={(event) => {
+                        setInputAddress(event.target.value);
+                      }}
+                      type="text"
+                    />
+                  </Autocomplete>
+                  {/* SUBMIT BUTTON */}
+                  <button
+                    onClick={() => {
+                      handleUpdateCurrentLocationBasedInput();
+                      setDirection(null);
+                      setZoom(12);
+                    }}
+                    className="App__btn map__btn"
+                    style={{ backgroundColor: currentTheme }}
+                  >
+                    {currentWindowSize < 501
+                      ? "Submit"
+                      : " Submit Your Location"}
+                  </button>
+                  {/* BUTTON TO SHOW NEARBY LOCATIONS WHEN THE WINDOW SIZE IS GREATER THAN 960PX
+                   */}
+                  {currentLocation && (
+                    <button
+                      onClick={() => {
+                        handleSearchNearbyLocation(currentLocation);
+                        setDirection(null);
+                        setZoom(12);
+                      }}
+                      className="App__btn map__btn map__btn-nearby"
+                      style={{ backgroundColor: currentTheme }}
+                    >
+                      Nearby Veterinary Health Center
+                    </button>
+                  )}
+                  {/* BUTTON TO RELLOCATE THE CURRENT LOCATION */}
+                  {currentLocation && (
+                    <IconContext.Provider
+                      value={{ color: "black", size: "1.5rem" }}
+                    >
+                      {map && (
+                        <div
+                          onClick={() => {
+                            map.panTo(currentLocation);
+                            setIsWindowOpen(true);
+                          }}
+                        >
+                          <FaLocationArrow />
+                        </div>
+                      )}
+                    </IconContext.Provider>
+                  )}
+                </div>
+                {/* SHOW DURATION AND DISTANCE */}
+                {direction && direction.duration && direction.distance && (
+                  <div className="map__dis-dur">
+                    <p>Distance: {direction.distance};</p>
+                    <p>Duration: {direction.duration}</p>
+                  </div>
+                )}
+              </div>
+              {/* CURRENT LOCATION */}
+              {currentLocation && isWindowOpen && (
+                <InfoWindow
+                  onCloseClick={() => {
+                    setIsWindowOpen(false);
                   }}
-                  type="text"
-                />
-              </Autocomplete>
-              {/* SUBMIT BUTTON */}
-              <button
-                onClick={() => {
-                  handleUpdateCurrentLocationBasedInput();
-                  setDirection(null);
-                  setZoom(12);
-                }}
-                className="App__btn map__btn"
-                style={{ backgroundColor: currentTheme }}
-              >
-                {currentWindowSize < 501 ? "Submit" : " Submit Your Location"}
-              </button>
-              {/* BUTTON TO SHOW NEARBY LOCATIONS WHEN THE WINDOW SIZE IS GREATER THAN 960PX
-               */}
+                  position={currentLocation}
+                >
+                  <p className="map__text">You are here</p>
+                </InfoWindow>
+              )}
+              {/* NEARBY LOCATIONS */}
+              {nearPlaces.length > 0 &&
+                nearPlaces.map((place, index) => (
+                  <Marker
+                    key={place.place_id}
+                    position={place.geometry.location}
+                    animation={window.google.maps.Animation.DROP} //GOOGLE IS DEFINED SINCE THE MAP HAS LOADED
+                    onClick={() => {
+                      handleShowDetailInfor(index);
+                      map.panTo(place.geometry.location);
+                    }}
+                  >
+                    {/* INFORWINDOWS OF NEARBY LOCATIONS */}
+                    {detailArr.length > 0 &&
+                      typeof detailArr[index] !== "number" &&
+                      index === selectedMarker.index &&
+                      selectedMarker.isOpen === true && (
+                        <InfoWindow
+                          onCloseClick={() => {
+                            setSelectedMarker({ index: null, isOpen: false });
+                          }}
+                          position={place.geometry.location}
+                          zIndex={10}
+                        >
+                          <div className="map__infor-container" id={index}>
+                            {detailArr[index].image && (
+                              <img
+                                className="map__infor-image"
+                                src={detailArr[index].image}
+                                alt="pic"
+                              />
+                            )}
+                            <h2>{detailArr[index].name}</h2>
+                            <p>
+                              <strong>Address:</strong>{" "}
+                              {detailArr[index].description}
+                            </p>
+                            <button
+                              onClick={() => {
+                                handleRoute(place.geometry.location, "transit");
+                                setSelectedMarker({
+                                  index: null,
+                                  isOpen: false,
+                                });
+                                setIsWindowOpen(true);
+                              }}
+                              style={btnStyle}
+                            >
+                              Transit to this place
+                            </button>
+                            <button
+                              onClick={() => {
+                                handleRoute(place.geometry.location, "driving");
+                                setSelectedMarker({
+                                  index: null,
+                                  isOpen: false,
+                                });
+                                setIsWindowOpen(true);
+                              }}
+                              style={btnStyle}
+                            >
+                              Drive to this place
+                            </button>
+                          </div>
+                        </InfoWindow>
+                      )}
+                  </Marker>
+                ))}
+              {/* BUTTON SHOWS NEARBY LOCATIONS WHEN THE SCREEN IS LESS THAN 960PX */}
               {currentLocation && (
                 <button
                   onClick={() => {
@@ -273,143 +410,32 @@ export default function GoogleMapComponent() {
                     setDirection(null);
                     setZoom(12);
                   }}
-                  className="App__btn map__btn map__btn-nearby"
+                  className="App__btn map__btn-nearby-absolute"
                   style={{ backgroundColor: currentTheme }}
                 >
-                  Nearby Veterinary Health Center
+                  Show Nearby Veterinary Health Center
                 </button>
               )}
-              {/* BUTTON TO RELLOCATE THE CURRENT LOCATION */}
-              {currentLocation && (
-                <IconContext.Provider
-                  value={{ color: "black", size: "1.5rem" }}
-                >
-                  {map && (
-                    <div
-                      onClick={() => {
-                        map.panTo(currentLocation);
-                        setIsWindowOpen(true);
-                      }}
-                    >
-                      <FaLocationArrow />
-                    </div>
-                  )}
-                </IconContext.Provider>
+              {/* DIRECTION RENDERER */}
+              {direction && direction.response && (
+                <DirectionsRenderer directions={direction.response} />
               )}
-            </div>
-            {/* SHOW DURATION AND DISTANCE */}
-            {direction && direction.duration && direction.distance && (
-              <div className="map__dis-dur">
-                <p>Distance: {direction.distance};</p>
-                <p>Duration: {direction.duration}</p>
-              </div>
-            )}
+              {/* CLEAR ROUTE BUTTON */}
+              {direction && direction.response && (
+                <button
+                  className="map__btn-clear-routes"
+                  onClick={() => {
+                    setDirection(null);
+                  }}
+                  style={{ backgroundColor: currentTheme, opacity: 0.7 }}
+                >
+                  Clear Routes
+                </button>
+              )}
+            </GoogleMap>
           </div>
-          {/* CURRENT LOCATION */}
-          {currentLocation && isWindowOpen && (
-            <InfoWindow
-              onCloseClick={() => {
-                setIsWindowOpen(false);
-              }}
-              position={currentLocation}
-            >
-              <p className="map__text">You are here</p>
-            </InfoWindow>
-          )}
-          {/* NEARBY LOCATIONS */}
-          {nearPlaces.length > 0 &&
-            nearPlaces.map((place, index) => (
-              <Marker
-                key={place.place_id}
-                position={place.geometry.location}
-                animation={window.google.maps.Animation.DROP} //GOOGLE IS DEFINED SINCE THE MAP HAS LOADED
-                onClick={() => {
-                  handleShowDetailInfor(index);
-                  map.panTo(place.geometry.location);
-                }}
-              >
-                {/* INFORWINDOWS OF NEARBY LOCATIONS */}
-                {detailArr.length > 0 &&
-                  typeof detailArr[index] !== "number" &&
-                  index === selectedMarker.index &&
-                  selectedMarker.isOpen === true && (
-                    <InfoWindow
-                      onCloseClick={() => {
-                        setSelectedMarker({ index: null, isOpen: false });
-                      }}
-                      position={place.geometry.location}
-                      zIndex={10}
-                    >
-                      <div className="map__infor-container" id={index}>
-                        {detailArr[index].image && (
-                          <img
-                            className="map__infor-image"
-                            src={detailArr[index].image}
-                            alt="pic"
-                          />
-                        )}
-                        <h2>{detailArr[index].name}</h2>
-                        <p>
-                          <strong>Address:</strong>{" "}
-                          {detailArr[index].description}
-                        </p>
-                        <button
-                          onClick={() => {
-                            handleRoute(place.geometry.location, "transit");
-                            setSelectedMarker({ index: null, isOpen: false });
-                            setIsWindowOpen(true);
-                          }}
-                          style={btnStyle}
-                        >
-                          Transit to this place
-                        </button>
-                        <button
-                          onClick={() => {
-                            handleRoute(place.geometry.location, "driving");
-                            setSelectedMarker({ index: null, isOpen: false });
-                            setIsWindowOpen(true);
-                          }}
-                          style={btnStyle}
-                        >
-                          Drive to this place
-                        </button>
-                      </div>
-                    </InfoWindow>
-                  )}
-              </Marker>
-            ))}
-          {/* BUTTON SHOWS NEARBY LOCATIONS WHEN THE SCREEN IS LESS THAN 960PX */}
-          {currentLocation && (
-            <button
-              onClick={() => {
-                handleSearchNearbyLocation(currentLocation);
-                setDirection(null);
-                setZoom(12);
-              }}
-              className="App__btn map__btn-nearby-absolute"
-              style={{ backgroundColor: currentTheme }}
-            >
-              Show Nearby Veterinary Health Center
-            </button>
-          )}
-          {/* DIRECTION RENDERER */}
-          {direction && direction.response && (
-            <DirectionsRenderer directions={direction.response} />
-          )}
-          {/* CLEAR ROUTE BUTTON */}
-          {direction && direction.response && (
-            <button
-              className="map__btn-clear-routes"
-              onClick={() => {
-                setDirection(null);
-              }}
-              style={{ backgroundColor: currentTheme, opacity: 0.7 }}
-            >
-              Clear Routes
-            </button>
-          )}
-        </GoogleMap>
-      </div>
+        </div>
+      )}
     </div>
   );
 }
