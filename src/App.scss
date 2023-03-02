@@ -127,20 +127,14 @@ input {
     }
   }
 
-  &__reset-button {
-    margin-top: 1.5rem;
-    width: 250px;
-    height: 55px;
-    @include tablet-desktop {
-      margin-top: 2rem;
-    }
-  }
-
   &__color-theme-wrapper {
     display: flex;
     gap: 1rem;
     justify-content: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
+    @include tablet-desktop {
+      margin-bottom: 1.5rem;
+    }
   }
 
   &__img {

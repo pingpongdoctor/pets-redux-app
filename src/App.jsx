@@ -99,12 +99,16 @@ function App() {
   };
   //FUNCTION TO UPDATE OWNER
   const handleSetNewOwner = function (id) {
-    dispatch(
-      updateOwner({
-        id: id,
-        owner: newOwner,
-      })
-    );
+    if (newOwner) {
+      dispatch(
+        updateOwner({
+          id: id,
+          owner: newOwner,
+        })
+      );
+    } else {
+      alert("Please insert a new owner");
+    }
   };
   //USEEFFECT TO SET THE UPDATED PETARR TO THE LOCAL STORAGE
   useEffect(() => {
@@ -137,33 +141,6 @@ function App() {
               List of pets and owners
             </h1>
 
-            {/* ADD PET */}
-            <div
-              data-aos="slide-right"
-              data-aos-duration={currentWindowSize > 832 ? "1100" : "600"}
-              data-aos-delay={currentWindowSize > 832 ? "800" : "400"}
-              className="App__add-pet-wrapper"
-            >
-              <input
-                value={petName}
-                onChange={handleUpdatPetName}
-                type="text"
-                placeholder="pet name..."
-              />
-              <input
-                value={ownerName}
-                onChange={handleUpdatOwnerName}
-                type="text"
-                placeholder="owner name..."
-              />
-              <button
-                className="App__btn"
-                style={{ backgroundColor: currentTheme }}
-                onClick={handleAddPet}
-              >
-                Add pet
-              </button>
-            </div>
             {/* CHANGE COLOR THEME */}
             <div
               data-aos="slide-left"
@@ -194,6 +171,45 @@ function App() {
                 {currentWindowSize < 500
                   ? "Change Color"
                   : "Change Color Theme"}
+              </button>
+              {/* BUTTON TO RESET DATA STORAGE */}
+              <button
+                className="App__btn"
+                style={{ backgroundColor: currentTheme }}
+                onClick={() => {
+                  localStorage.clear();
+                  window.location.reload(); //USE THIS TO RELOAD THE CURRENT PAGE
+                }}
+              >
+                Reset local storage
+              </button>
+            </div>
+
+            {/* ADD PET */}
+            <div
+              data-aos="slide-right"
+              data-aos-duration={currentWindowSize > 832 ? "1100" : "600"}
+              data-aos-delay={currentWindowSize > 832 ? "800" : "400"}
+              className="App__add-pet-wrapper"
+            >
+              <input
+                value={petName}
+                onChange={handleUpdatPetName}
+                type="text"
+                placeholder="pet name..."
+              />
+              <input
+                value={ownerName}
+                onChange={handleUpdatOwnerName}
+                type="text"
+                placeholder="owner name..."
+              />
+              <button
+                className="App__btn"
+                style={{ backgroundColor: currentTheme }}
+                onClick={handleAddPet}
+              >
+                Add pet
               </button>
             </div>
             {/* RENDER PETS */}
@@ -268,21 +284,6 @@ function App() {
                   </div>
                 ))}
             </div>
-            {petArr.length > 0 && imgLinkArr.length > 0 && (
-              <button
-                data-aos="fade"
-                data-aos-duration="500"
-                data-aos-delay="400"
-                className="App__btn App__reset-button"
-                style={{ backgroundColor: currentTheme }}
-                onClick={() => {
-                  localStorage.clear();
-                  window.location.reload(); //USE THIS TO RELOAD THE CURRENT PAGE
-                }}
-              >
-                Reset the browser's local storage
-              </button>
-            )}
           </div>
         </div>
       )}
