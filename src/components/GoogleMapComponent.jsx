@@ -223,7 +223,7 @@ export default function GoogleMapComponent() {
         <div className="map__big-container">
           <h1
             data-aos="fade-up"
-            data-aos-duration={currentWindowSize > 832 ? "900" : "600"}
+            data-aos-duration={currentWindowSize > 832 ? "900" : "700"}
             data-aos-delay={currentWindowSize > 832 ? "800" : "500"}
             className="map__heading"
           >
@@ -231,7 +231,7 @@ export default function GoogleMapComponent() {
           </h1>
           <div
             data-aos="fade-up"
-            data-aos-duration={currentWindowSize > 832 ? "900" : "600"}
+            data-aos-duration={currentWindowSize > 832 ? "900" : "700"}
             data-aos-delay={currentWindowSize > 832 ? "800" : "500"}
           >
             <GoogleMap
