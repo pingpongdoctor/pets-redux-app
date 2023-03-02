@@ -270,7 +270,7 @@ function App() {
             </div>
             <button
               data-aos="fade"
-              data-aos-duration="700"
+              data-aos-duration="500"
               data-aos-delay="400"
               className="App__btn App__reset-button"
               style={{ backgroundColor: currentTheme }}
