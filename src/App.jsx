@@ -240,13 +240,9 @@ function App() {
                       data-aos-duration={
                         currentWindowSize > 832 ? "1500" : "800"
                       }
-                      data-aos-delay={currentWindowSize > 832 ? "800" : "400"}
+                      data-aos-delay={currentWindowSize > 832 ? "800" : "100"}
                       className="App__pet-owner-infor"
                     >
-                      <p>
-                        {" "}
-                        <strong>Id:</strong> {pet.id}
-                      </p>
                       <p>
                         <strong>Pet name:</strong> {pet.name}
                       </p>
