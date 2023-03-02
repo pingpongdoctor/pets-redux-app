@@ -223,16 +223,16 @@ export default function GoogleMapComponent() {
         <div className="map__big-container">
           <h1
             data-aos="fade-up"
-            data-aos-duration={currentWindowSize > 832 ? "900" : "700"}
-            data-aos-delay={currentWindowSize > 832 ? "800" : "500"}
+            data-aos-duration={currentWindowSize > 832 ? "700" : "400"}
+            data-aos-delay={currentWindowSize > 832 ? "600" : "400"}
             className="map__heading"
           >
             Search nearby veterinary health centers
           </h1>
           <div
             data-aos="fade-up"
-            data-aos-duration={currentWindowSize > 832 ? "900" : "700"}
-            data-aos-delay={currentWindowSize > 832 ? "800" : "500"}
+            data-aos-duration={currentWindowSize > 832 ? "700" : "400"}
+            data-aos-delay={currentWindowSize > 832 ? "600" : "400"}
           >
             <GoogleMap
               mapContainerClassName="map__element"
