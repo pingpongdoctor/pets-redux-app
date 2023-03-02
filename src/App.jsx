@@ -268,19 +268,21 @@ function App() {
                   </div>
                 ))}
             </div>
-            <button
-              data-aos="fade"
-              data-aos-duration="500"
-              data-aos-delay="400"
-              className="App__btn App__reset-button"
-              style={{ backgroundColor: currentTheme }}
-              onClick={() => {
-                localStorage.clear();
-                window.location.reload(); //USE THIS TO RELOAD THE CURRENT PAGE
-              }}
-            >
-              Reset the browser's local storage
-            </button>
+            {petArr.length > 0 && imgLinkArr.length > 0 && (
+              <button
+                data-aos="fade"
+                data-aos-duration="500"
+                data-aos-delay="400"
+                className="App__btn App__reset-button"
+                style={{ backgroundColor: currentTheme }}
+                onClick={() => {
+                  localStorage.clear();
+                  window.location.reload(); //USE THIS TO RELOAD THE CURRENT PAGE
+                }}
+              >
+                Reset the browser's local storage
+              </button>
+            )}
           </div>
         </div>
       )}
