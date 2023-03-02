@@ -7,6 +7,10 @@ import GoogleMapComponent from "./components/GoogleMapComponent";
 import axios from "axios";
 import { useWindowSize } from "./utils/utils";
 import videoBackground from "./assets/videos/background-video.mp4";
+import Aos from "aos";
+import "aos/dist/aos.css";
+
+Aos.init();
 
 function App() {
   //GET CURRENT WINDOW SIZE
@@ -114,127 +118,172 @@ function App() {
 
   return (
     <div style={{ color: currentTheme }} className="App">
-      <div className="App__cat">
-        <video
-          muted
-          loop
-          autoPlay
-          className="App__video-background"
-          src={videoBackground}
-        ></video>
-        <div className="App__cat-containers">
-          <h1 className="App__heading">List of pets and owners</h1>
-          {/* ADD PET */}
-          <div className="App__add-pet-wrapper">
-            <input
-              value={petName}
-              onChange={handleUpdatPetName}
-              type="text"
-              placeholder="pet name..."
-            />
-            <input
-              value={ownerName}
-              onChange={handleUpdatOwnerName}
-              type="text"
-              placeholder="owner name..."
-            />
-            <button
-              className="App__btn"
-              style={{ backgroundColor: currentTheme }}
-              onClick={handleAddPet}
+      {currentWindowSize && (
+        <div className="App__cat">
+          <video
+            muted
+            loop
+            autoPlay
+            className="App__video-background"
+            src={videoBackground}
+          ></video>
+          <div className="App__cat-containers">
+            <h1
+              data-aos-duration={currentWindowSize > 832 ? "2000" : "500"}
+              data-aos-delay={currentWindowSize > 832 ? "800" : "400"}
+              data-aos="fade-up"
+              className="App__heading"
             >
-              Add pet
-            </button>
-          </div>
-          {/* CHANGE COLOR THEME */}
-          <div className="App__color-theme-wrapper">
-            <input
-              value={color}
-              onChange={(event) => {
-                setColor(event.target.value);
-              }}
-              type="text"
-              placeholder="Input color here..."
-            />
+              List of pets and owners
+            </h1>
+
+            {/* ADD PET */}
+            <div
+              data-aos="slide-right"
+              data-aos-duration={currentWindowSize > 832 ? "1100" : "600"}
+              data-aos-delay={currentWindowSize > 832 ? "800" : "400"}
+              className="App__add-pet-wrapper"
+            >
+              <input
+                value={petName}
+                onChange={handleUpdatPetName}
+                type="text"
+                placeholder="pet name..."
+              />
+              <input
+                value={ownerName}
+                onChange={handleUpdatOwnerName}
+                type="text"
+                placeholder="owner name..."
+              />
+              <button
+                className="App__btn"
+                style={{ backgroundColor: currentTheme }}
+                onClick={handleAddPet}
+              >
+                Add pet
+              </button>
+            </div>
+            {/* CHANGE COLOR THEME */}
+            <div
+              data-aos="slide-left"
+              data-aos-duration={currentWindowSize > 832 ? "1300" : "700"}
+              data-aos-delay={currentWindowSize > 832 ? "800" : "400"}
+              className="App__color-theme-wrapper"
+            >
+              <input
+                value={color}
+                onChange={(event) => {
+                  setColor(event.target.value);
+                }}
+                type="text"
+                placeholder="Input color here..."
+              />
+              <button
+                className="App__btn"
+                style={{ backgroundColor: currentTheme }}
+                onClick={() => {
+                  if (isColorValid()) {
+                    dispatch(changeTheme(color));
+                    alert(`Color theme has been changed to ${color}`);
+                  } else {
+                    alert("Please input the color!");
+                  }
+                }}
+              >
+                {currentWindowSize < 500
+                  ? "Change Color"
+                  : "Change Color Theme"}
+              </button>
+            </div>
+            {/* RENDER PETS */}
+            <div className="App__flex-container">
+              {petArr.length > 0 &&
+                imgLinkArr.length > 0 &&
+                petArr.map((pet, index) => (
+                  <div
+                    data-aos="fade"
+                    data-aos-duration={currentWindowSize > 832 ? "1500" : "800"}
+                    data-aos-delay={currentWindowSize > 832 ? "800" : "400"}
+                    className="App__flex-item"
+                    key={pet.id}
+                  >
+                    <img
+                      data-aos="fade"
+                      data-aos-duration={
+                        currentWindowSize > 832 ? "1500" : "800"
+                      }
+                      data-aos-delay={currentWindowSize > 832 ? "800" : "400"}
+                      className="App__img"
+                      src={imgLinkArr[index]}
+                      alt="cat-img"
+                    />
+
+                    <div
+                      data-aos="fade-up"
+                      data-aos-duration={
+                        currentWindowSize > 832 ? "1500" : "800"
+                      }
+                      data-aos-delay={currentWindowSize > 832 ? "800" : "400"}
+                      className="App__pet-owner-infor"
+                    >
+                      <p>
+                        {" "}
+                        <strong>Id:</strong> {pet.id}
+                      </p>
+                      <p>
+                        <strong>Pet name:</strong> {pet.name}
+                      </p>
+                      <p>
+                        {" "}
+                        <strong>Owner name:</strong> {pet.owner}
+                      </p>
+                      <input
+                        onChange={handleUpdateNewOwner}
+                        type="text"
+                        placeholder="New owner..."
+                        id="new-owner-input"
+                        className="App__input-pet"
+                      />
+                      <button
+                        className="App__btn App__btn-pet"
+                        style={{ backgroundColor: currentTheme }}
+                        onClick={() => {
+                          handleSetNewOwner(pet.id);
+                          document.getElementById("new-owner-input").value = "";
+                        }}
+                      >
+                        Add new owner
+                      </button>
+                      <button
+                        className="App__btn App__btn-pet"
+                        style={{ backgroundColor: currentTheme }}
+                        onClick={() => {
+                          handleDeletePet(pet.id);
+                        }}
+                      >
+                        Delete pet
+                      </button>
+                    </div>
+                  </div>
+                ))}
+            </div>
             <button
-              className="App__btn"
+              data-aos="fade"
+              data-aos-duration="800"
+              data-aos-delay="100"
+              className="App__btn App__reset-button"
               style={{ backgroundColor: currentTheme }}
               onClick={() => {
-                if (isColorValid()) {
-                  dispatch(changeTheme(color));
-                  alert(`Color theme has been changed to ${color}`);
-                } else {
-                  alert("Please input the color!");
-                }
+                localStorage.clear();
+                window.location.reload(); //USE THIS TO RELOAD THE CURRENT PAGE
               }}
             >
-              {currentWindowSize < 500 ? "Change Color" : "Change Color Theme"}
+              Reset the browser's local storage
             </button>
           </div>
-          {/* RENDER PETS */}
-          <div className="App__flex-container">
-            {petArr.length > 0 &&
-              petArr.map((pet, index) => (
-                <div className="App__flex-item" key={pet.id}>
-                  <img
-                    className="App__img"
-                    src={imgLinkArr[index]}
-                    alt="cat-img"
-                  />
-                  <div className="App__pet-owner-infor">
-                    <p>
-                      {" "}
-                      <strong>Id:</strong> {pet.id}
-                    </p>
-                    <p>
-                      <strong>Pet name:</strong> {pet.name}
-                    </p>
-                    <p>
-                      {" "}
-                      <strong>Owner name:</strong> {pet.owner}
-                    </p>
-                    <input
-                      onChange={handleUpdateNewOwner}
-                      type="text"
-                      placeholder="New owner..."
-                      id="new-owner-input"
-                      className="App__input-pet"
-                    />
-                    <button
-                      className="App__btn App__btn-pet"
-                      style={{ backgroundColor: currentTheme }}
-                      onClick={() => {
-                        handleSetNewOwner(pet.id);
-                        document.getElementById("new-owner-input").value = "";
-                      }}
-                    >
-                      Add new owner
-                    </button>
-                    <button
-                      className="App__btn App__btn-pet"
-                      style={{ backgroundColor: currentTheme }}
-                      onClick={() => {
-                        handleDeletePet(pet.id);
-                      }}
-                    >
-                      Delete pet
-                    </button>
-                  </div>
-                </div>
-              ))}
-          </div>
-          <button
-            className="App__btn App__reset-button"
-            style={{ backgroundColor: currentTheme }}
-            onClick={() => {
-              localStorage.clear();
-              window.location.reload(); //USE THIS TO RELOAD THE CURRENT PAGE
-            }}
-          >
-            Reset the browser's local storage
-          </button>
         </div>
-      </div>
+      )}
       {/* GOOGLE MAP */}
       <GoogleMapComponent />
     </div>
