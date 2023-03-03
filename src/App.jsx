@@ -284,7 +284,7 @@ function App() {
         </div>
       )}
       {/* GOOGLE MAP */}
-      <GoogleMapComponent />
+      {imgLinkArr.length > 0 && <GoogleMapComponent />}
     </div>
   );
 }
