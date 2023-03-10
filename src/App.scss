@@ -34,6 +34,24 @@ input {
 }
 
 .App {
+  animation: opacityIncrease 1s;
+  background-color: #26282f;
+  &__loading-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: #26282f;
+  }
+
+  &__loading-page-disappear {
+    @extend .App__loading-page;
+    animation: opacityDecrease 1s;
+    position: absolute;
+    z-index: 0;
+  }
+
   &__heading {
     margin-top: 0;
     background-color: rgba(255, 255, 240, 0.7);
@@ -92,6 +110,11 @@ input {
     box-shadow: 0px 1px 16px -6px rgba(0, 0, 0, 0.6);
     background-color: rgba(255, 255, 240, 0.5);
     width: 60%;
+    transition: transform 0.5s;
+    &:hover {
+      filter: brightness(1.1);
+      transform: scale(1.05) !important;
+    }
     p {
       font-size: 1.5rem;
     }
@@ -145,7 +168,7 @@ input {
 
   &__img {
     width: 100%;
-    aspect-ratio: 1;
+    aspect-ratio: 1/1;
     margin-bottom: 1rem;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -161,6 +184,7 @@ input {
   &__cat-containers {
     position: relative;
     padding-top: 2rem;
+    z-index: 3;
     @include desktop {
       padding-top: 3rem;
       margin: 0 auto;
@@ -175,5 +199,6 @@ input {
     width: 100vw;
     height: 100vh;
     object-fit: cover;
+    z-index: 2;
   }
 }
