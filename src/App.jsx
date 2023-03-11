@@ -11,6 +11,7 @@ import Aos from "aos";
 import "aos/dist/aos.css";
 import { useLoadScript } from "@react-google-maps/api";
 import { PushSpinner } from "react-spinners-kit";
+import ReactPlayer from "react-player";
 
 Aos.init({ duration: 800 });
 const libraries = ["places"];
@@ -36,8 +37,10 @@ function App() {
   const [newOwner, setNewOwner] = useState("");
   //STATE FOR THE COLOR
   const [color, setColor] = useState("");
-  //STATE FOT THE ARRAY OF CAT IMAGE LINKS
+  //STATE FOR THE ARRAY OF CAT IMAGE LINKS
   const [imgLinkArr, setImgLinkArr] = useState([]);
+  //STATE FOR THE PLAY STATUS
+  const [play, setPlay] = useState(true);
   //USE EFFECT TO GET CAT PICTURES
   useEffect(() => {
     const getImgData = async function () {
@@ -154,6 +157,11 @@ function App() {
       }
     }
   };
+
+  useEffect(() => {
+    console.log(play);
+  }, [play]);
+
   //LOADING PAGE
   if (
     !showPage ||
@@ -178,11 +186,24 @@ function App() {
         <div style={{ color: currentTheme }} className="App">
           {currentWindowSize && (
             <div className="App__cat">
+              <ReactPlayer
+                url={
+                  "https://soundcloud.com/user-595317454/home-day-time-theme-tsuki?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
+                }
+                playing={play}
+                className="App__audio"
+                onEnded={() => {
+                  setPlay(false);
+                  setTimeout(() => {
+                    setPlay(true);
+                  }, 2000);
+                }}
+              />
               <div className="App__video-color"></div>
               <video
                 muted
-                loop
                 autoPlay
+                loop
                 className="App__video-background"
                 src={videoBackground}
               ></video>
