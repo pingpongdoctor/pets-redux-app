@@ -36,6 +36,14 @@ input {
 .App {
   animation: opacityIncrease 1s;
   background-color: #26282f;
+
+  &__audio {
+    width: 100vw !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
   &__loading-page {
     display: flex;
     justify-content: center;
@@ -176,6 +184,7 @@ input {
 
   &__cat {
     padding: 0 1rem;
+    position: relative;
     @include tablet-desktop {
       padding: 0 2rem;
     }
