@@ -12,7 +12,7 @@ import "aos/dist/aos.css";
 import { useLoadScript } from "@react-google-maps/api";
 import { PushSpinner } from "react-spinners-kit";
 
-Aos.init({ animatedClassName: "aos-animate", duration: 800 });
+Aos.init({ duration: 800 });
 const libraries = ["places"];
 function App() {
   //USE USELOAD SCRIPT TO INTEGRATE GOOGLE MAP API
@@ -178,6 +178,7 @@ function App() {
         <div style={{ color: currentTheme }} className="App">
           {currentWindowSize && (
             <div className="App__cat">
+              <div className="App__video-color"></div>
               <video
                 muted
                 loop

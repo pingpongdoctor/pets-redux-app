@@ -199,6 +199,20 @@ input {
     width: 100vw;
     height: 100vh;
     object-fit: cover;
+    z-index: 1;
+  }
+
+  &__video-color {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
     z-index: 2;
+    background-image: linear-gradient(
+      to right,
+      rgba(0, 0, 255, 0.1),
+      rgba(0, 0, 255, 0.1)
+    );
   }
 }

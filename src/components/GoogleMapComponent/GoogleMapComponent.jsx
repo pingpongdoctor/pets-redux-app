@@ -3,7 +3,6 @@ import { FaLocationArrow } from "react-icons/fa";
 import { IconContext } from "react-icons";
 import {
   GoogleMap,
-  useLoadScript,
   Marker,
   InfoWindow,
   Autocomplete,
@@ -11,7 +10,6 @@ import {
 } from "@react-google-maps/api";
 import { useEffect, useState } from "react";
 import { useWindowSize } from "../../utils/utils";
-import { convertNumberToArr } from "../../utils/utils";
 import { useSelector } from "react-redux";
 import Aos from "aos";
 import "aos/dist/aos.css";
@@ -27,7 +25,7 @@ export default function GoogleMapComponent({ loadError, isLoaded }) {
   //STATE FOR DIRECTION INFOR
   const [direction, setDirection] = useState(null);
   //STATE FOR THE DETAIL INFOR ARR
-  const [detailArr, setDetailArr] = useState([]);
+  // const [detailArr, setDetailArr] = useState([]);
   //STATE FOR THE INFOR WINDOW
   const [isWindowOpen, setIsWindowOpen] = useState(true);
   //STATE FOR THE SELECTED MARKER'S INFOR WINDOW
@@ -65,36 +63,36 @@ export default function GoogleMapComponent({ loadError, isLoaded }) {
   //SINCE THE METHOD GETDETAILS IS OPERATED ASYNCHRONOUSLY AND IT DOES NOT HANDLE A PROMISE
   //WE NEED TO DEFINE A PROMISE TO HAULT THE CODE EXECUTION
   const handleShowDetailInfor = async function (index) {
-    let newArr = [...detailArr];
-    const service = new window.google.maps.places.PlacesService(map);
-    //USE NEW PROMISE TO HAULT THE CODE EXECUTION ULTIL THE RETURN VALUE IS RETURNED
-    const returnValue = await new Promise((resolve, reject) => {
-      service.getDetails(
-        {
-          placeId: nearPlaces[index].place_id,
-          fields: ["name", "formatted_address", "photos"],
-        },
-        (result, status) => {
-          if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-            resolve(result);
-          } else {
-            reject(status);
-          }
-        }
-      );
-    });
-    //USE THE RETURNED VALUE TO DEFINE A NEW OBJECT
-    let newObj = {
-      name: returnValue.name,
-      description: returnValue.formatted_address,
-      image: returnValue.photos && returnValue.photos[0].getUrl(),
-    };
+    // let newArr = [...detailArr];
+    // const service = new window.google.maps.places.PlacesService(map);
+    // //USE NEW PROMISE TO HAULT THE CODE EXECUTION ULTIL THE RETURN VALUE IS RETURNED
+    // const returnValue = await new Promise((resolve, reject) => {
+    //   service.getDetails(
+    //     {
+    //       placeId: nearPlaces[index].place_id,
+    //       fields: ["name", "formatted_address", "photos"],
+    //     },
+    //     (result, status) => {
+    //       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+    //         resolve(result);
+    //       } else {
+    //         reject(status);
+    //       }
+    //     }
+    //   );
+    // });
 
-    newArr.splice(index, 1, newObj);
-    setDetailArr(newArr);
+    //USE THE RETURNED VALUE TO DEFINE A NEW OBJECT
+    // let newObj = {
+    //   name: returnValue.name,
+    //   address: returnValue.formatted_address,
+    //   image: returnValue.photos && returnValue.photos[0].getUrl(),
+    // };
+
+    // newArr.splice(index, 1, newObj);
+    // setDetailArr(newArr);
     setSelectedMarker({ index: index, isOpen: true });
   };
-
   //FUNCTION TO SEARCH NEARBY LOCATION BASED ON A PROVIDED LOCATION
   const handleSearchNearbyLocation = function (location) {
     //DEFINE SERVICE BY USING PLACESERVICE PROP
@@ -113,8 +111,8 @@ export default function GoogleMapComponent({ loadError, isLoaded }) {
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
           //SET THE PLACES TO THE NEARPLACES STATE
           setNearPlaces(results);
-          const newDetailArr = convertNumberToArr(results.length);
-          setDetailArr(newDetailArr);
+          // const newDetailArr = convertNumberToArr(results.length);
+          // setDetailArr(newDetailArr);
         }
       }
     );
@@ -122,19 +120,19 @@ export default function GoogleMapComponent({ loadError, isLoaded }) {
   };
 
   //FUNCTION TO SET THE CURRENT LOCATION STATE BY USING HTML5 GEOLOCATION API
-  const handleUpdateCurrentLocationBasedUserLocation = function () {
-    if (navigator.geolocation) {
-      //GET CURRENT LOCATION FROM THE METHOD GETCURRENTPOSITION
-      navigator.geolocation.getCurrentPosition((position) => {
-        const { latitude, longitude } = position.coords;
-        setCurrentLocation({ lat: latitude, lng: longitude });
-      });
-    } else {
-      alert(
-        "Can not access your location to find nearby veterinary health centers"
-      );
-    }
-  };
+  // const handleUpdateCurrentLocationBasedUserLocation = function () {
+  //   if (navigator.geolocation) {
+  //     //GET CURRENT LOCATION FROM THE METHOD GETCURRENTPOSITION
+  //     navigator.geolocation.getCurrentPosition((position) => {
+  //       const { latitude, longitude } = position.coords;
+  //       setCurrentLocation({ lat: latitude, lng: longitude });
+  //     });
+  //   } else {
+  //     alert(
+  //       "Can not access your location to find nearby veterinary health centers"
+  //     );
+  //   }
+  // };
   //FUNCTION TO UPDATE THE CURRENTLOCATION STATE BASED ON THE INPUT ADDRESS
   const handleUpdateCurrentLocationBasedInput = function () {
     if (inputAddress) {
@@ -185,7 +183,8 @@ export default function GoogleMapComponent({ loadError, isLoaded }) {
     color: "white",
     borderRadius: "5px",
     border: "none",
-    padding: "1rem",
+    padding: "0.5rem",
+    fontSize: "0.8rem",
   };
 
   //DEFINE ONMAP LOAD FUNCTION
@@ -284,21 +283,20 @@ export default function GoogleMapComponent({ loadError, isLoaded }) {
                       </button>
                     )}
                     {/* BUTTON TO RELLOCATE THE CURRENT LOCATION */}
-                    {currentLocation && (
-                      <IconContext.Provider
-                        value={{ color: "black", size: "1.5rem" }}
+                    {currentLocation && map && (
+                      <div
+                        className="map__recenter-icon"
+                        onClick={() => {
+                          map.panTo(currentLocation);
+                          setIsWindowOpen(true);
+                        }}
                       >
-                        {map && (
-                          <div
-                            onClick={() => {
-                              map.panTo(currentLocation);
-                              setIsWindowOpen(true);
-                            }}
-                          >
-                            <FaLocationArrow />
-                          </div>
-                        )}
-                      </IconContext.Provider>
+                        <IconContext.Provider
+                          value={{ color: "black", size: "1.6rem" }}
+                        >
+                          <FaLocationArrow />
+                        </IconContext.Provider>
+                      </div>
                     )}
                   </div>
                   {/* SHOW DURATION AND DISTANCE */}
@@ -333,9 +331,7 @@ export default function GoogleMapComponent({ loadError, isLoaded }) {
                       }}
                     >
                       {/* INFORWINDOWS OF NEARBY LOCATIONS */}
-                      {detailArr.length > 0 &&
-                        typeof detailArr[index] !== "number" &&
-                        index === selectedMarker.index &&
+                      {index === selectedMarker.index &&
                         selectedMarker.isOpen === true && (
                           <InfoWindow
                             onCloseClick={() => {
@@ -345,18 +341,15 @@ export default function GoogleMapComponent({ loadError, isLoaded }) {
                             zIndex={10}
                           >
                             <div className="map__infor-container" id={index}>
-                              {detailArr[index].image && (
-                                <img
-                                  className="map__infor-image"
-                                  src={detailArr[index].image}
-                                  alt="pic"
-                                />
-                              )}
-                              <h2>{detailArr[index].name}</h2>
+                              <img
+                                className="map__infor-image"
+                                src={place.photos[0].getUrl()}
+                                alt="pic"
+                              />
                               <p>
-                                <strong>Address:</strong>{" "}
-                                {detailArr[index].description}
+                                <strong>{place.name}</strong>
                               </p>
+                              <p>{place.vicinity}</p>
                               <button
                                 onClick={() => {
                                   handleRoute(
@@ -369,6 +362,7 @@ export default function GoogleMapComponent({ loadError, isLoaded }) {
                                   });
                                   setIsWindowOpen(true);
                                 }}
+                                className="map__route-btn"
                                 style={btnStyle}
                               >
                                 Transit to this place
@@ -385,6 +379,7 @@ export default function GoogleMapComponent({ loadError, isLoaded }) {
                                   });
                                   setIsWindowOpen(true);
                                 }}
+                                className="map__route-btn"
                                 style={btnStyle}
                               >
                                 Drive to this place

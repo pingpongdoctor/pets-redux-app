@@ -1,11 +1,11 @@
 @use "../../styles//mixins" as *;
 
 .map {
-  padding-top: 1.5rem;
+  padding-top: 3rem;
   z-index: 3;
   position: relative;
   @include tablet-desktop {
-    padding-top: 2.5rem;
+    padding-top: 6rem;
   }
 
   &__container {
@@ -31,6 +31,7 @@
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     position: relative;
+    opacity: 0.9;
   }
 
   &__search-box {
@@ -44,9 +45,9 @@
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
-    background-color: ivory;
+    background-color: rgba(0, 0, 0, 0.448);
     width: fit-content;
-    padding: 0.5rem;
+    padding: 1rem;
     border-radius: 10px;
     z-index: 20;
     align-items: flex-start;
@@ -61,6 +62,16 @@
   &__btn {
     @include small-mobile {
       width: 80px;
+    }
+  }
+
+  &__recenter-icon {
+    transition: transform 0.5s;
+    &:hover {
+      transform: scale(1.2);
+    }
+    &:active {
+      transform: scale(0.9);
     }
   }
 
@@ -116,21 +127,36 @@
     }
   }
 
+  &__infor-container {
+    display: flex;
+    flex-direction: column;
+    width: 170px;
+    gap: 0.5rem;
+    padding-left: 0.25rem;
+    p {
+      font-size: 0.8rem;
+      color: black;
+    }
+  }
+
   &__infor-image {
     width: auto;
-    max-height: 200px;
+    height: 150px;
     object-fit: cover;
     object-position: center;
   }
 
-  &__infor-container {
-    display: flex;
-    flex-direction: column;
-    width: 300px;
-    gap: 0.5rem;
-    p {
-      font-size: 1rem;
-      color: black;
+  &__route-btn {
+    transition: transform 0.5s;
+    border: none;
+    width: 97%;
+    margin: 0 auto;
+    &:hover {
+      transform: scale(1.03);
+    }
+    &:active {
+      box-shadow: 0px 1px 16px -6px rgba(0, 0, 0, 0.181);
+      transform: scale(0.95);
     }
   }
 
@@ -141,7 +167,7 @@
   }
 
   &__dis-dur {
-    color: red;
+    color: white;
     display: flex;
     gap: 0.3rem;
     p {
