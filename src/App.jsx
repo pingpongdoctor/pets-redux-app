@@ -1,6 +1,6 @@
 import "./App.scss";
 import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useDebugValue } from "react";
 import { addPet, deletePet, updateOwner } from "./features/Pets";
 import { changeTheme } from "./features/ThemeColor";
 import GoogleMapComponent from "./components/GoogleMapComponent/GoogleMapComponent";
@@ -12,6 +12,8 @@ import "aos/dist/aos.css";
 import { useLoadScript } from "@react-google-maps/api";
 import { PushSpinner } from "react-spinners-kit";
 import ReactPlayer from "react-player";
+import { BsPlayCircle, BsPauseCircle } from "react-icons/bs";
+import { IconContext } from "react-icons";
 
 Aos.init({ duration: 800 });
 const libraries = ["places"];
@@ -40,7 +42,7 @@ function App() {
   //STATE FOR THE ARRAY OF CAT IMAGE LINKS
   const [imgLinkArr, setImgLinkArr] = useState([]);
   //STATE FOR THE PLAY STATUS
-  const [play, setPlay] = useState(true);
+  const [play, setPlay] = useState(false);
   //USE EFFECT TO GET CAT PICTURES
   useEffect(() => {
     const getImgData = async function () {
@@ -158,10 +160,6 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    console.log(play);
-  }, [play]);
-
   //LOADING PAGE
   if (
     !showPage ||
@@ -186,19 +184,56 @@ function App() {
         <div style={{ color: currentTheme }} className="App">
           {currentWindowSize && (
             <div className="App__cat">
-              <ReactPlayer
-                url={
-                  "https://soundcloud.com/user-595317454/home-day-time-theme-tsuki?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
-                }
-                playing={play}
-                className="App__audio"
-                onEnded={() => {
-                  setPlay(false);
-                  setTimeout(() => {
-                    setPlay(true);
-                  }, 2000);
-                }}
-              />
+              <div className="App__music" data-aos="slide-left">
+                <p className="App__music-text">Music</p>
+                {!play && (
+                  <div
+                    className="App__music-icon"
+                    onClick={() => {
+                      const audioContext = new AudioContext();
+                      audioContext.resume();
+                      setPlay(true);
+                    }}
+                  >
+                    <IconContext.Provider
+                      value={{ color: "black", size: "100%" }}
+                    >
+                      <BsPlayCircle />
+                    </IconContext.Provider>
+                  </div>
+                )}
+                {play && (
+                  <div
+                    className="App__music-icon"
+                    onClick={() => {
+                      const audioContext = new AudioContext();
+                      audioContext.resume();
+                      setPlay(false);
+                    }}
+                  >
+                    <IconContext.Provider
+                      value={{ color: "black", size: "100%" }}
+                    >
+                      <BsPauseCircle />
+                    </IconContext.Provider>
+                  </div>
+                )}
+              </div>
+              {play && (
+                <ReactPlayer
+                  url={
+                    "https://soundcloud.com/user-595317454/home-day-time-theme-tsuki?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
+                  }
+                  playing={true}
+                  className="App__audio"
+                  onEnded={() => {
+                    setPlay(false);
+                    setTimeout(() => {
+                      setPlay(true);
+                    }, 2000);
+                  }}
+                />
+              )}
               <div className="App__video-color"></div>
               <video
                 muted
