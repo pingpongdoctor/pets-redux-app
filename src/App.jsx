@@ -1,6 +1,6 @@
 import "./App.scss";
 import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect, useDebugValue } from "react";
+import { useState, useEffect } from "react";
 import { addPet, deletePet, updateOwner } from "./features/Pets";
 import { changeTheme } from "./features/ThemeColor";
 import GoogleMapComponent from "./components/GoogleMapComponent/GoogleMapComponent";
@@ -10,7 +10,7 @@ import videoBackground from "./assets/videos/background-video.mp4";
 import Aos from "aos";
 import "aos/dist/aos.css";
 import { useLoadScript } from "@react-google-maps/api";
-import { PushSpinner } from "react-spinners-kit";
+import { PushSpinner, RotateSpinner, WaveSpinner } from "react-spinners-kit";
 import ReactPlayer from "react-player";
 import { BsPlayCircle, BsPauseCircle } from "react-icons/bs";
 import { IconContext } from "react-icons";
@@ -160,6 +160,8 @@ function App() {
     }
   };
 
+  const [musicLoading, setMusicLoading] = useState(false);
+
   //LOADING PAGE
   if (
     !showPage ||
@@ -184,7 +186,14 @@ function App() {
         <div style={{ color: currentTheme }} className="App">
           {currentWindowSize && (
             <div className="App__cat">
-              <div className="App__music" data-aos="slide-left">
+              <div className="App__music-playing">
+                <WaveSpinner size={currentWindowSize > 832 ? 33 : 22} />
+              </div>
+              <div
+                className="App__music"
+                data-aos="fade"
+                data-aos-delay={currentWindowSize > 832 ? "700" : "500"}
+              >
                 <p className="App__music-text">Music</p>
                 {!play && (
                   <div
@@ -193,6 +202,10 @@ function App() {
                       const audioContext = new AudioContext();
                       audioContext.resume();
                       setPlay(true);
+                      setMusicLoading(true);
+                      setTimeout(() => {
+                        setMusicLoading(false);
+                      }, 3000);
                     }}
                   >
                     <IconContext.Provider
@@ -200,6 +213,14 @@ function App() {
                     >
                       <BsPlayCircle />
                     </IconContext.Provider>
+                  </div>
+                )}
+                {play && musicLoading && (
+                  <div>
+                    <RotateSpinner
+                      size={currentWindowSize > 832 ? 38 : 30}
+                      color="#00ff89"
+                    />
                   </div>
                 )}
                 {play && (
