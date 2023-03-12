@@ -199,6 +199,10 @@ export default function GoogleMapComponent({ loadError, isLoaded }) {
     });
   };
 
+  useEffect(() => {
+    console.log(nearPlaces);
+  }, [nearPlaces]);
+
   //IF LOADING MAP PROCESS IS ERROR
   if (loadError) {
     return <div>Error Loading Map</div>;
@@ -341,11 +345,13 @@ export default function GoogleMapComponent({ loadError, isLoaded }) {
                             zIndex={10}
                           >
                             <div className="map__infor-container" id={index}>
-                              <img
-                                className="map__infor-image"
-                                src={place.photos[0].getUrl()}
-                                alt="pic"
-                              />
+                              {place.photos[0] && (
+                                <img
+                                  className="map__infor-image"
+                                  src={place.photos[0].getUrl()}
+                                  alt="pic"
+                                />
+                              )}
                               <p>
                                 <strong>{place.name}</strong>
                               </p>
