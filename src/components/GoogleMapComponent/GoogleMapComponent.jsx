@@ -345,7 +345,7 @@ export default function GoogleMapComponent({ loadError, isLoaded }) {
                             zIndex={10}
                           >
                             <div className="map__infor-container" id={index}>
-                              {place.photos[0] && (
+                              {place.photos && place.photos[0] && (
                                 <img
                                   className="map__infor-image"
                                   src={place.photos[0].getUrl()}
