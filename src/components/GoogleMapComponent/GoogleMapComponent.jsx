@@ -116,6 +116,7 @@ export default function GoogleMapComponent({ loadError, isLoaded }) {
         }
       }
     );
+    setZoom(13);
     setIsWindowOpen(true);
   };
 
@@ -169,13 +170,6 @@ export default function GoogleMapComponent({ loadError, isLoaded }) {
       }
     );
   };
-
-  //USEEFFECT TO SEARCH NEARBY LOCATIONS WHEN THE CURRENT LOCATION IS AVAILABLE
-  useEffect(() => {
-    if (currentLocation) {
-      setZoom(12);
-    }
-  });
 
   //DEFINE THE STYLE OBJECT FOR DIRECTION BUTTON
   const btnStyle = {
@@ -278,7 +272,7 @@ export default function GoogleMapComponent({ loadError, isLoaded }) {
                         onClick={() => {
                           handleSearchNearbyLocation(currentLocation);
                           setDirection(null);
-                          setZoom(12);
+                          setZoom(15);
                         }}
                         className="App__btn map__btn map__btn-nearby"
                         style={{ backgroundColor: currentTheme }}
