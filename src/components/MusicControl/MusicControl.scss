@@ -1,0 +1,50 @@
+@use "../../styles//mixins" as *;
+
+.music-control {
+  background: rgba(0, 0, 0, 0.234);
+  width: fit-content;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  display: flex;
+  gap: 0.5rem;
+  border-radius: 10px;
+  padding: 0.5rem;
+  align-items: center;
+  width: 110px;
+  height: 47px;
+  @include tablet-desktop {
+    width: 150px;
+    height: 61px;
+  }
+
+  &__playing-background {
+    width: fit-content;
+    position: absolute;
+    top: 0.6rem;
+    left: 0.7rem;
+    border-radius: 10px;
+    width: fit-content;
+  }
+
+  &__text {
+    color: white;
+    font-size: 1.5rem;
+    margin: 0;
+    @include tablet-desktop {
+      font-size: 2.2rem;
+    }
+  }
+
+  &__icon {
+    margin-top: 0.2rem;
+    transition: transform 0.5s;
+    &:hover {
+      transform: scale(1.1);
+    }
+    &:active {
+      transform: scale(1);
+    }
+  }
+}
