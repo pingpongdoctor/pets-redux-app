@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 //GET THE COLOR THEME FROM LOCAL STORAGE
 const themeLocalStorage = localStorage.getItem("themeLocalStorage");
-console.log(themeLocalStorage);
 const themeSlice = createSlice({
   name: "theme",
   initialState: { value: themeLocalStorage ? themeLocalStorage : "black" },

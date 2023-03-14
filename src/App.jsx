@@ -11,7 +11,6 @@ import Aos from "aos";
 import "aos/dist/aos.css";
 import { useLoadScript } from "@react-google-maps/api";
 import { PushSpinner } from "react-spinners-kit";
-import ReactPlayer from "react-player";
 import MusicControl from "./components/MusicControl/MusicControl";
 import SoundCloudPlayer from "./components/SoundCloudPlayer/SoundCloudPlayer";
 
@@ -27,8 +26,6 @@ function App() {
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries,
   });
-  //STATE TO SHOW THE PAGE
-  const [showPage, setShowPage] = useState(false);
   //GET CURRENT WINDOW SIZE
   const currentWindowSize = useWindowSize().width;
   //USE DISPATCH METHOD TO RUN THE REDUCER FUNCTIONS
@@ -37,6 +34,8 @@ function App() {
   const petArr = useSelector((state) => state.pets.value);
   //ACCESS THE THEME REDUCER
   const currentTheme = useSelector((state) => state.theme.value);
+  //STATE TO SHOW THE PAGE
+  const [showPage, setShowPage] = useState(false);
   //STATE FOR THE PET AND OWNER INPUTS
   const [petName, setPetName] = useState("");
   const [ownerName, setOwnerName] = useState("");
@@ -48,11 +47,6 @@ function App() {
   const [imgLinkArr, setImgLinkArr] = useState([]);
   //STATE FOR THE PLAY STATUS
   const [play, setPlay] = useState(false);
-
-  //FUNCTION TO UPDATE THE PLAY STATE
-  const handleUpdatePlayState = function (value) {
-    setPlay(value);
-  };
 
   //USE EFFECT TO GET CAT PICTURES
   useEffect(() => {
@@ -72,6 +66,11 @@ function App() {
     };
     getImgData();
   }, [petArr]);
+
+  //FUNCTION TO UPDATE THE PLAY STATE
+  const handleUpdatePlayState = function (value) {
+    setPlay(value);
+  };
 
   //FUNCTIONS TO UPDATE PET AND OWNER NAMES
   const handleUpdatPetName = function (event) {

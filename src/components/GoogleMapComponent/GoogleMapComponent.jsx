@@ -193,10 +193,6 @@ export default function GoogleMapComponent({ loadError, isLoaded }) {
     });
   };
 
-  useEffect(() => {
-    console.log(nearPlaces);
-  }, [nearPlaces]);
-
   //IF LOADING MAP PROCESS IS ERROR
   if (loadError) {
     return <div>Error Loading Map</div>;
