@@ -193,10 +193,6 @@ export default function GoogleMapComponent({ loadError, isLoaded }) {
     });
   };
 
-  useEffect(() => {
-    console.log(nearPlaces);
-  }, [nearPlaces]);
-
   //IF LOADING MAP PROCESS IS ERROR
   if (loadError) {
     return <div>Error Loading Map</div>;
@@ -272,7 +268,7 @@ export default function GoogleMapComponent({ loadError, isLoaded }) {
                         onClick={() => {
                           handleSearchNearbyLocation(currentLocation);
                           setDirection(null);
-                          setZoom(15);
+                          setZoom(13);
                         }}
                         className="App__btn map__btn map__btn-nearby"
                         style={{ backgroundColor: currentTheme }}
