@@ -307,6 +307,7 @@ function App() {
                     Add pet
                   </button>
                 </div>
+
                 {/* RENDER PETS */}
                 <div className="App__flex-container">
                   {petArr.length > 0 &&
@@ -327,7 +328,6 @@ function App() {
                           src={imgLinkArr[index]}
                           alt="cat-img"
                         />
-
                         <div
                           data-aos="fade-up"
                           data-aos-delay={
@@ -376,6 +376,7 @@ function App() {
               </div>
             </div>
           )}
+
           {/* GOOGLE MAP */}
           <GoogleMapComponent isLoaded={isLoaded} loadError={loadError} />
         </div>
