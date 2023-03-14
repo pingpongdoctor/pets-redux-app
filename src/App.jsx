@@ -10,19 +10,24 @@ import videoBackground from "./assets/videos/background-video.mp4";
 import Aos from "aos";
 import "aos/dist/aos.css";
 import { useLoadScript } from "@react-google-maps/api";
-import { PushSpinner, RotateSpinner, WaveSpinner } from "react-spinners-kit";
+import { PushSpinner } from "react-spinners-kit";
 import ReactPlayer from "react-player";
-import { BsPlayCircle, BsPauseCircle } from "react-icons/bs";
-import { IconContext } from "react-icons";
+import MusicControl from "./components/MusicControl/MusicControl";
+import SoundCloudPlayer from "./components/SoundCloudPlayer/SoundCloudPlayer";
 
+//SET UP AOS
 Aos.init({ duration: 800 });
+
+//DEFINE LIBRARIES USED IN GOOGLE MAP API
 const libraries = ["places"];
+
 function App() {
   //USE USELOAD SCRIPT TO INTEGRATE GOOGLE MAP API
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries,
   });
+  //STATE TO SHOW THE PAGE
   const [showPage, setShowPage] = useState(false);
   //GET CURRENT WINDOW SIZE
   const currentWindowSize = useWindowSize().width;
@@ -43,6 +48,12 @@ function App() {
   const [imgLinkArr, setImgLinkArr] = useState([]);
   //STATE FOR THE PLAY STATUS
   const [play, setPlay] = useState(false);
+
+  //FUNCTION TO UPDATE THE PLAY STATE
+  const handleUpdatePlayState = function (value) {
+    setPlay(value);
+  };
+
   //USE EFFECT TO GET CAT PICTURES
   useEffect(() => {
     const getImgData = async function () {
@@ -61,17 +72,22 @@ function App() {
     };
     getImgData();
   }, [petArr]);
+
   //FUNCTIONS TO UPDATE PET AND OWNER NAMES
   const handleUpdatPetName = function (event) {
     setPetName(event.target.value);
   };
+
+  //FUNCTIONS TO UPDATE OWNER NAME
   const handleUpdatOwnerName = function (event) {
     setOwnerName(event.target.value);
   };
+
   //FUNCTIONS TO UPDATE NEW OWNER
   const handleUpdateNewOwner = function (event) {
     setNewOwner(event.target.value);
   };
+
   //FUNCTION TO VALIDATE PETNAME AND OWNER NAME
   const isPetAndOwnerValid = function () {
     if (petName && ownerName) {
@@ -79,6 +95,7 @@ function App() {
     }
     return false;
   };
+
   //FUNCTION TO VALIDATE COLOR
   const isColorValid = function () {
     if (color) {
@@ -86,6 +103,7 @@ function App() {
     }
     return false;
   };
+
   //FUNCTION TO ADD PET
   const handleAddPet = function () {
     if (isPetAndOwnerValid()) {
@@ -104,6 +122,7 @@ function App() {
     setPetName("");
     setOwnerName("");
   };
+
   //FUNCTION TO DELETE PET
   const handleDeletePet = function (id) {
     dispatch(
@@ -113,6 +132,7 @@ function App() {
     );
     alert(`The pet and owner with the id ${id} have been deleted`);
   };
+
   //FUNCTION TO UPDATE OWNER
   const handleSetNewOwner = function (id) {
     if (newOwner) {
@@ -126,10 +146,12 @@ function App() {
       alert("Please insert a new owner");
     }
   };
+
   //USEEFFECT TO SET THE UPDATED PETARR TO THE LOCAL STORAGE
   useEffect(() => {
     localStorage.setItem("petArrLocalStorage", JSON.stringify(petArr));
   }, [petArr]);
+
   //USEEFFECT TO SET THE UPDATED THEME TO THE LOCAL STORAGE
   useEffect(() => {
     localStorage.setItem("themeLocalStorage", currentTheme);
@@ -160,8 +182,6 @@ function App() {
     }
   };
 
-  const [musicLoading, setMusicLoading] = useState(false);
-
   //LOADING PAGE
   if (
     !showPage ||
@@ -180,81 +200,28 @@ function App() {
   if (showPage && isLoaded && petArr.length > 0 && imgLinkArr.length > 0) {
     return (
       <div>
-        <div className="App__loading-page-disappear">
-          <PushSpinner size={100} color="#00ff89" />
-        </div>
         <div style={{ color: currentTheme }} className="App">
           {currentWindowSize && (
             <div className="App__cat">
-              <div className="App__music-playing">
-                <WaveSpinner size={currentWindowSize > 832 ? 33 : 22} />
+              {/* LOADING PAGE */}
+              <div className="App__loading-page-disappear">
+                <PushSpinner size={100} color="#00ff89" />
               </div>
-              <div
-                className="App__music"
-                data-aos="fade"
-                data-aos-delay={currentWindowSize > 832 ? "700" : "500"}
-              >
-                <p className="App__music-text">Music</p>
-                {!play && (
-                  <div
-                    className="App__music-icon"
-                    onClick={() => {
-                      const audioContext = new AudioContext();
-                      audioContext.resume();
-                      setPlay(true);
-                      setMusicLoading(true);
-                      setTimeout(() => {
-                        setMusicLoading(false);
-                      }, 3000);
-                    }}
-                  >
-                    <IconContext.Provider
-                      value={{ color: "black", size: "100%" }}
-                    >
-                      <BsPlayCircle />
-                    </IconContext.Provider>
-                  </div>
-                )}
-                {play && musicLoading && (
-                  <div>
-                    <RotateSpinner
-                      size={currentWindowSize > 832 ? 38 : 30}
-                      color="#00ff89"
-                    />
-                  </div>
-                )}
-                {play && (
-                  <div
-                    className="App__music-icon"
-                    onClick={() => {
-                      const audioContext = new AudioContext();
-                      audioContext.resume();
-                      setPlay(false);
-                    }}
-                  >
-                    <IconContext.Provider
-                      value={{ color: "black", size: "100%" }}
-                    >
-                      <BsPauseCircle />
-                    </IconContext.Provider>
-                  </div>
-                )}
-              </div>
-              {play && (
-                <ReactPlayer
-                  url={
-                    "https://soundcloud.com/user-595317454/home-day-time-theme-tsuki?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
-                  }
-                  playing={true}
-                  className="App__audio"
-                  onEnded={() => {
-                    setPlay(false);
-                    setTimeout(() => {
-                      setPlay(true);
-                    }, 2000);
-                  }}
-                />
-              )}
+
+              {/* MUSIC CONTROL BAR */}
+              <MusicControl
+                currentWindowSize={currentWindowSize}
+                handleUpdatePlayState={handleUpdatePlayState}
+                play={play}
+              />
+
+              {/* SOUNDCLOUD AUDIO PLAYER */}
+              <SoundCloudPlayer
+                play={play}
+                handleUpdatePlayState={handleUpdatePlayState}
+              />
+
+              {/* VIDEO BACKGROUND */}
               <div className="App__video-color"></div>
               <video
                 muted
