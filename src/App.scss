@@ -39,6 +39,10 @@ input {
   animation: opacityIncrease 1s;
   background-color: #26282f;
 
+  &__display-none {
+    display: none;
+  }
+
   &__audio {
     width: 100vw !important;
     position: absolute;
@@ -53,15 +57,15 @@ input {
     width: 100vw;
     height: 100vh;
     background-color: #26282f;
-  }
-
-  &__loading-page-disappear {
-    @extend .App__loading-page;
-    animation: opacityDecrease 1s;
-    position: absolute;
-    z-index: 0;
+    position: fixed;
+    z-index: 1000;
     top: 0;
     left: 0;
+  }
+
+  &__loading-page-none {
+    animation: opacityDecrease 1s;
+    z-index: 0;
   }
 
   &__heading {
