@@ -205,7 +205,7 @@ function App() {
     if (imgLinkArr.length > 0 && isLoaded && isVideoLoad) {
       setTimeout(() => {
         setShowPageClass("App__loading-page-none");
-      }, 2000);
+      }, 1000);
     }
   });
 
