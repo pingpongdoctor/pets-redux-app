@@ -64,7 +64,7 @@ function App() {
       setImgLinkArr(newArr);
     };
     getImgData();
-  }, [petArr]);
+  }, []);
 
   //FUNCTION TO UPDATE THE PLAY MUSIC STATE
   const handleUpdatePlayState = function (value) {
@@ -121,14 +121,31 @@ function App() {
     setOwnerName("");
   };
 
+  //IF PET ARRAY LENGTH IS LONGER THAN IMAGE ARRAY, ADD 1 MORE IMAGE
+  useEffect(() => {
+    const updateImageLinkFunc = async function () {
+      if (petArr.length > imgLinkArr.length) {
+        const response = await axios.get("https://aws.random.cat/meow");
+        const newArr = [...imgLinkArr, response.data.file];
+        setImgLinkArr(newArr);
+      }
+    };
+    updateImageLinkFunc();
+  }, [petArr, imgLinkArr]);
+
   //FUNCTION TO DELETE PET ITEM
   const handleDeletePet = function (id) {
-    dispatch(
-      deletePet({
-        id: id,
-      })
-    );
-    alert(`The pet and owner with the id ${id} have been deleted`);
+    if (petArr.length > 1) {
+      dispatch(
+        deletePet({
+          id: id,
+        })
+      );
+      alert(`The pet and owner with the id ${id} have been deleted`);
+    }
+    if (petArr.length === 1) {
+      alert(`You can not delete all items`);
+    }
   };
 
   //FUNCTION TO UPDATE OWNER FOR A PET
