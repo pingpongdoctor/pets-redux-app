@@ -66,12 +66,12 @@ function App() {
     getImgData();
   }, [petArr]);
 
-  //FUNCTION TO UPDATE THE PLAY STATE
+  //FUNCTION TO UPDATE THE PLAY MUSIC STATE
   const handleUpdatePlayState = function (value) {
     setPlay(value);
   };
 
-  //FUNCTIONS TO UPDATE PET AND OWNER NAMES
+  //FUNCTIONS TO UPDATE PET NAME
   const handleUpdatPetName = function (event) {
     setPetName(event.target.value);
   };
@@ -81,7 +81,7 @@ function App() {
     setOwnerName(event.target.value);
   };
 
-  //FUNCTIONS TO UPDATE NEW OWNER
+  //FUNCTIONS TO CHANGE THE CURRENT OWNER
   const handleUpdateNewOwner = function (event) {
     setNewOwner(event.target.value);
   };
@@ -94,7 +94,7 @@ function App() {
     return false;
   };
 
-  //FUNCTION TO VALIDATE COLOR
+  //FUNCTION TO VALIDATE COLOR THEME
   const isColorValid = function () {
     if (color) {
       return true;
@@ -102,7 +102,7 @@ function App() {
     return false;
   };
 
-  //FUNCTION TO ADD PET
+  //FUNCTION TO ADD NEW PET ITEM
   const handleAddPet = function () {
     if (isPetAndOwnerValid()) {
       const id = petArr[petArr.length - 1].id + 1;
@@ -121,7 +121,7 @@ function App() {
     setOwnerName("");
   };
 
-  //FUNCTION TO DELETE PET
+  //FUNCTION TO DELETE PET ITEM
   const handleDeletePet = function (id) {
     dispatch(
       deletePet({
@@ -131,7 +131,7 @@ function App() {
     alert(`The pet and owner with the id ${id} have been deleted`);
   };
 
-  //FUNCTION TO UPDATE OWNER
+  //FUNCTION TO UPDATE OWNER FOR A PET
   const handleSetNewOwner = function (id) {
     if (newOwner) {
       dispatch(
@@ -145,12 +145,12 @@ function App() {
     }
   };
 
-  //USEEFFECT TO SET THE UPDATED PETARR TO THE LOCAL STORAGE
+  //USEEFFECT TO SET THE UPDATED PET ARRAY TO THE LOCAL STORAGE
   useEffect(() => {
     localStorage.setItem("petArrLocalStorage", JSON.stringify(petArr));
   }, [petArr]);
 
-  //USEEFFECT TO SET THE UPDATED THEME TO THE LOCAL STORAGE
+  //USEEFFECT TO SET THE UPDATED COLOR THEME TO THE LOCAL STORAGE
   useEffect(() => {
     localStorage.setItem("themeLocalStorage", currentTheme);
     setColor("");
