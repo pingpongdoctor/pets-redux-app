@@ -1,22 +1,22 @@
 export const petData = [
   {
     id: 1,
-    name: "toto",
-    owner: "simon",
+    name: "Toto",
+    owner: "Simon",
   },
   {
     id: 2,
-    name: "tata",
-    owner: "sandy",
+    name: "Tata",
+    owner: "Sandy",
   },
   {
     id: 3,
-    name: "meme",
-    owner: "tuan",
+    name: "Meme",
+    owner: "John",
   },
   {
     id: 4,
-    name: "lala",
-    owner: "loc",
+    name: "Lala",
+    owner: "Louis",
   },
 ];
