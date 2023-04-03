@@ -13,6 +13,7 @@ import { useLoadScript } from "@react-google-maps/api";
 import { PushSpinner } from "react-spinners-kit";
 import MusicControl from "./components/MusicControl/MusicControl";
 import SoundCloudPlayer from "./components/SoundCloudPlayer/SoundCloudPlayer";
+const CAT_API_KEY = process.env.REACT_APP_CAT_API_KEY;
 
 //SET UP AOS
 Aos.init({ duration: 800 });
@@ -55,13 +56,12 @@ function App() {
     const getImgData = async function () {
       //GET THE NUMBER OF IMAGES THAT EQUALS TO THE LENGTH OF THE PET ARRAY
       const arrLength = petArr.length;
-      const newArr = [];
-      for (let i = 1; i <= arrLength; i++) {
-        //GET DATA FROM CAT REST API
-        const response = await axios.get("https://aws.random.cat/meow");
-        newArr.push(response.data.file);
-      }
-      setImgLinkArr(newArr);
+      //GET DATA FROM CAT REST API
+      const response = await axios.get(
+        `https://api.thecatapi.com/v1/images/search?limit=${arrLength}&api_key=${CAT_API_KEY}`
+      );
+      const imgArr = response.data.map((obj) => obj.url);
+      setImgLinkArr(imgArr);
     };
     getImgData();
   }, []);
@@ -125,8 +125,10 @@ function App() {
   useEffect(() => {
     const updateImageLinkFunc = async function () {
       if (petArr.length > imgLinkArr.length) {
-        const response = await axios.get("https://aws.random.cat/meow");
-        const newArr = [...imgLinkArr, response.data.file];
+        const response = await axios.get(
+          `https://api.thecatapi.com/v1/images/search?limit=1&api_key=${CAT_API_KEY}`
+        );
+        const newArr = [...imgLinkArr, response.data[0].url];
         setImgLinkArr(newArr);
       }
     };
@@ -208,6 +210,9 @@ function App() {
       }, 1000);
     }
   });
+  useEffect(() => {
+    console.log(isLoaded, petArr.length, imgLinkArr.length);
+  }, [isLoaded, petArr.length, imgLinkArr.length]);
 
   if (isLoaded && petArr.length > 0 && imgLinkArr.length > 0) {
     return (
