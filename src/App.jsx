@@ -200,7 +200,7 @@ function App() {
         setIsVideoLoad(true);
       });
     }
-  });
+  }, [isLoaded, petArr.length, imgLinkArr.length]);
 
   //CHECK IF DATA IS FULLY LOADED TO MAKE THE LOADING PAGE DISAPPEAR
   useEffect(() => {
@@ -209,10 +209,7 @@ function App() {
         setShowPageClass("App__loading-page-none");
       }, 1000);
     }
-  });
-  useEffect(() => {
-    console.log(isLoaded, petArr.length, imgLinkArr.length);
-  }, [isLoaded, petArr.length, imgLinkArr.length]);
+  }, [isLoaded, imgLinkArr.length, isVideoLoad]);
 
   if (isLoaded && petArr.length > 0 && imgLinkArr.length > 0) {
     return (
